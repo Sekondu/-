@@ -1,0 +1,45 @@
+import { Platform, StyleSheet } from 'react-native';
+import modal from '../Home';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { View } from 'react-native';
+import Cabinet from '../Cabinet';
+import { Ionicons } from '@expo/vector-icons';
+import { PillProvider } from '../PillContext';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Add_medecine } from '../AddMedecine';
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+function HomeScreen() {
+  return (
+      <Tab.Navigator >
+        <Tab.Screen name="Cabinet" options={{headerShown : false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="medkit" size={size} color={color} />
+          ),
+          tabBarHideOnKeyboard : true
+        }} component={Cabinet}/>
+        <Tab.Screen  options={{headerShown : false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }} name="Home" component={modal}/>
+      </Tab.Navigator>
+  );
+}
+
+export default function full_app(){
+  return <SafeAreaProvider>
+    <PillProvider>
+    <StatusBar backgroundColor={"#FFF"} translucent={false}/>
+    <Stack.Navigator>
+    <Stack.Screen name="Main Tabs" component={HomeScreen} options={{headerShown : false}} />
+    <Stack.Screen name="add_medecine" component={Add_medecine} options={{presentation : "modal" , headerShown : false, contentStyle : { backgroundColor : "lightgreen"}}}/>
+  </Stack.Navigator>
+  </PillProvider>
+  </SafeAreaProvider>
+}
+
