@@ -58,12 +58,12 @@ export function Add_medecine({ navigation }) {
     return <View style={{ flex: 1, backgroundColor: "transparent" }}>
         <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "transparent" }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={100}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 100, borderRadius: 20, backgroundColor: "lightgreen", zIndex: 1, display: "flex", gap: 10 }}>
-                    <Text style={{ fontWeight: "bold", textAlign: "center", marginTop: 30, fontSize: 24 }}>Add Medication</Text>
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: 40 }}>
+                <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, paddingBottom: height * 0.1, borderRadius: 20, backgroundColor: "lightgreen", zIndex: 1, display: "flex", gap: height * 0.012 }}>
+                    <Text allowFontScaling={false} style={{ fontWeight: "bold", textAlign: "center", marginTop: height * 0.04, fontSize: width * 0.06 }}>Add Medication</Text>
+                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
                         <View>
-                            <Text style={{ marginBottom: 10, fontWeight: "bold", fontSize: 18, }}>Medication Name</Text>
-                            <TextInput onChangeText={
+                            <Text allowFontScaling={false} style={{ marginBottom: height * 0.012, fontWeight: "bold", fontSize: width * 0.045, }}>Medication Name</Text>
+                            <TextInput allowFontScaling={false} onChangeText={
                                 (text) => {
                                     setName(text);
                                     setMissingName(Name.length > 0 ? false : true);
@@ -75,27 +75,27 @@ export function Add_medecine({ navigation }) {
                                     }
                                 }
                             } placeholder="eg. Panadol" placeholderTextColor={"grey"} style={{ backgroundColor: "white", width: width * 0.65, height: height * 0.06, borderRadius: 20, padding: 5 }} />
-                            {nameError && <Text style={{ fontSize: 15, marginTop: 5, marginLeft: 5, fontWeight: "bold", color: "red" }}>Name Already Used!</Text>}
-                            {!nameError && Name.length > 0 && <Text style={{ fontSize: 15, marginTop: 5, marginLeft: 5, fontWeight: "bold" }}>Name is Available!</Text>}
-                            {missingName && <Text style={{ fontSize: 15, marginTop: 5, marginLeft: 5, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
+                            {nameError && <Text style={{ fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>Name Already Used!</Text>}
+                            {!nameError && Name.length > 0 && <Text style={{ fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold" }}>Name is Available!</Text>}
+                            {missingName && <Text style={{ fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
                         </View>
                     </View>
 
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: 40 }}>
+                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
                         <View>
-                            <Text style={{ marginBottom: 10, fontWeight: "bold", fontSize: 18, }}>Number of Pills</Text>
-                            <TextInput keyboardType="numeric" onChangeText={
+                            <Text allowFontScaling={false} style={{ marginBottom: height * 0.012, fontWeight: "bold", fontSize: width * 0.045, }}>Number of Pills</Text>
+                            <TextInput allowFontScaling={false} keyboardType="numeric" onChangeText={
                                 (text) => {
                                     setPillCount(Number(text));
                                     setMissingPill(Number(text) >= 0 ? false : true);
                                 }
                             } placeholder="eg. 20" placeholderTextColor={"grey"} style={{ backgroundColor: "white", width: width * 0.65, height: height * 0.06, borderRadius: 20, padding: 5 }} />
-                            {missingPill && <Text style={{ fontSize: 15, marginTop: 5, marginLeft: 5, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
+                            {missingPill && <Text style={{ fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
                         </View>
                     </View>
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: 40 }}>
+                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
                         <TouchableOpacity onPress={() => { setOpenTime(true) }}>
-                            <Text style={{ fontWeight: "bold", backgroundColor: "#50956c", padding: 15, alignSelf: "center", borderRadius: 15, color: "white" }}>Pick Time for Notification</Text>
+                            <Text allowFontScaling={false} style={{ fontWeight: "bold", backgroundColor: "#50956c", padding: 15, alignSelf: "center", borderRadius: 15, color: "white" }}>Pick Time for Notification</Text>
                         </TouchableOpacity>
                     </View>
                     {openTime && (
@@ -136,17 +136,18 @@ export function Add_medecine({ navigation }) {
                             borderBottomLeftRadius: 15,
                             borderBottomRightRadius: 15
                         }}>
-                            <Text style={{
+                            <Text allowFontScaling={false} style={{
                                 textAlign: "center",
                                 textAlignVertical: "bottom",
-                                fontWeight: "bold"
+                                fontWeight: "bold",
+                                fontSize: width * 0.035
                             }}>{time.getHours() % 12} :{time.getMinutes() < 10 ? 0 : ""}{time.getMinutes()} {time.getHours() < 12 ? "AM" : "PM"}</Text>
                         </View>
                     </View>
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: 40 }}>
+                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
                         <View>
-                            <Text style={{ marginBottom: 10, fontWeight: "bold", fontSize: 18, marginLeft: 5 }}>Extra Info</Text>
-                            <TextInput onChangeText={
+                            <Text allowFontScaling={false} style={{ marginBottom: height * 0.012, fontWeight: "bold", fontSize: width * 0.045, marginLeft: 5 }}>Extra Info</Text>
+                            <TextInput allowFontScaling={false} onChangeText={
                                 (text) => {
                                     setmoreInfo(text);
                                 }
@@ -154,7 +155,7 @@ export function Add_medecine({ navigation }) {
                         </View>
                     </View>
                     <TouchableOpacity onPress={handleSubmit} style={{ width: "70%", alignSelf: "center", height: height * 0.08, backgroundColor: "green", marginTop: height * 0.4, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", borderRadius: 20, gap: 10 }}>
-                        <Ionicons name="checkmark" size={24} style={{ alignSelf: "center", textAlign: "center" }} /><Text style={{ textAlign: "center", fontSize: 20 }}>Save Changes</Text>
+                        <Ionicons name="checkmark" size={width * 0.06} style={{ alignSelf: "center", textAlign: "center" }} /><Text allowFontScaling={false} style={{ textAlign: "center", fontSize: width * 0.05 }}>Save Changes</Text>
                     </TouchableOpacity>
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: 40 }}>
                     </View>

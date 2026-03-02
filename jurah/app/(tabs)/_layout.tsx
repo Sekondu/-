@@ -1,4 +1,4 @@
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, I18nManager } from 'react-native';
 import modal from '../Home';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -16,6 +16,9 @@ import { useEffect } from 'react';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
+
+I18nManager.allowRTL(false);
+I18nManager.forceRTL(false);
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -56,7 +59,7 @@ export default function full_app() {
   }, [])
   return <SafeAreaProvider>
     <PillProvider>
-      <StatusBar backgroundColor={"#FFF"} translucent={false} />
+      <StatusBar backgroundColor={"#FFF"} barStyle="dark-content" translucent={false} />
       <Stack.Navigator>
         <Stack.Screen name="Main Tabs" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="add_medecine" component={Add_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "lightgreen" } }} />

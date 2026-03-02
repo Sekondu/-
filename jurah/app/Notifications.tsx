@@ -14,12 +14,11 @@ export async function SchedulePillNotification(pill) {
             body: `Take your ${pill.Name} pill in 10 minutes`,
         },
         trigger: {
-            type: SchedulableTriggerInputTypes.CALENDAR,
+            type: SchedulableTriggerInputTypes.DAILY,
             hour: pillTime.getMinutes() >= 10
                 ? pillTime.getHours()
                 : pillTime.getHours() === 0 ? 23 : pillTime.getHours() - 1,
             minute: pillTime.getMinutes() >= 10 ? pillTime.getMinutes() - 10 : pillTime.getMinutes() + 50,
-            repeats: true,
         }
     })
 
