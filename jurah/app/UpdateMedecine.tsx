@@ -6,22 +6,26 @@ import { Ionicons } from "@expo/vector-icons"
 import { v4 as uuidv4 } from 'uuid'
 import 'react-native-get-random-values';
 import { SchedulePillNotification } from './Notifications';
-export function Add_medecine({ navigation }) {
+export function Update_medecine({ navigation, route }) {
+
+    const { id } = route.params;
 
     const { state, dispatch } = useContext(PillContext);
     const { width, height } = useWindowDimensions();
-    const [Name, setName] = useState("");
-    const [pillCount, setPillCount] = useState(null);
+
+    const medecine = state.find(pill => pill.id === id);
+
+    const [Name, setName] = useState(medecine.Name);
+    const [pillCount, setPillCount] = useState(medecine.pillCount);
     const [nameError, setNameError] = useState(false);
 
     const [openTime, setOpenTime] = useState(false);
-    const [time, setTime] = useState(new Date());
+    const [time, setTime] = useState(medecine.time_to_take);
 
     const [missingName, setMissingName] = useState(false);
     const [missingPill, setMissingPill] = useState(false);
 
-    const [moreInfo, setmoreInfo] = useState("");
-
+    const [moreInfo, setmoreInfo] = useState(medecine.more_info);
 
     function check_name(name) {
         return state.some(pill => pill.Name.toLowerCase() == name.toLowerCase());
@@ -43,13 +47,13 @@ export function Add_medecine({ navigation }) {
         }
         if (!missingName && !missingPill) {
             const payload = {
-                id: uuidv4(),
+                id: id,
                 Name: Name,
                 pillCount: pillCount,
                 time_to_take: time,
                 more_info: moreInfo,
             }
-            dispatch({ type: "add_medecine", payload });
+            dispatch({ type: "update_medecine", payload });
             SchedulePillNotification(payload);
             navigation.goBack();
         }
@@ -59,11 +63,11 @@ export function Add_medecine({ navigation }) {
         <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "transparent" }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={100}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
                 <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ paddingBottom: 100, borderRadius: 20, backgroundColor: "lightgreen", zIndex: 1, display: "flex", gap: 10 }}>
-                    <Text style={{ fontWeight: "bold", textAlign: "center", marginTop: 30, fontSize: 24 }}>Add Medication</Text>
+                    <Text style={{ fontWeight: "bold", textAlign: "center", marginTop: 30, fontSize: 24 }}>Update Medication</Text>
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: 40 }}>
                         <View>
                             <Text style={{ marginBottom: 10, fontWeight: "bold", fontSize: 18, }}>Medication Name</Text>
-                            <TextInput onChangeText={
+                            <TextInput value={medecine.Name} onChangeText={
                                 (text) => {
                                     setName(text);
                                     setMissingName(Name.length > 0 ? false : true);
@@ -84,7 +88,7 @@ export function Add_medecine({ navigation }) {
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: 40 }}>
                         <View>
                             <Text style={{ marginBottom: 10, fontWeight: "bold", fontSize: 18, }}>Number of Pills</Text>
-                            <TextInput keyboardType="numeric" onChangeText={
+                            <TextInput keyboardType="numeric" value={String(pillCount)} onChangeText={
                                 (text) => {
                                     setPillCount(Number(text));
                                     setMissingPill(Number(text) >= 0 ? false : true);
@@ -139,14 +143,14 @@ export function Add_medecine({ navigation }) {
                             <Text style={{
                                 textAlign: "center",
                                 textAlignVertical: "bottom",
-                                fontWeight: "bold"
+                                fontWeight: "bold",
                             }}>{time.getHours() % 12} :{time.getMinutes() < 10 ? 0 : ""}{time.getMinutes()} {time.getHours() < 12 ? "AM" : "PM"}</Text>
                         </View>
                     </View>
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: 40 }}>
                         <View>
                             <Text style={{ marginBottom: 10, fontWeight: "bold", fontSize: 18, marginLeft: 5 }}>Extra Info</Text>
-                            <TextInput onChangeText={
+                            <TextInput value={moreInfo} onChangeText={
                                 (text) => {
                                     setmoreInfo(text);
                                 }

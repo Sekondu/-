@@ -1,20 +1,25 @@
-import { useContext,useReducer,createContext } from "react";
+import { useContext, useReducer, createContext, useEffect, useRef } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
+export const PillContext = createContext({ state: [], dispatch: () => { } });
 
-export const PillContext = createContext(null) || {state : [] , dispatch : () => {}} ;
+function Pillreducer(state, action) {
 
-function Pillreducer(state, action){
-
-    switch(action.type){
+    switch (action.type) {
 
         case 'add_medecine':
             return [...state, action.payload];
 
         case 'remove_medecine':
-            return state.filter( medecine => medecine.id !== action.payload.id);
+            return state.filter(medecine => medecine.id !== action.payload.id);
 
         case 'update_medecine':
-            return [...state.filter(medecine => medecine.id !== action.payload.id) , action.payload];
+            return [...state.filter(medecine => medecine.id !== action.payload.id), action.payload];
+
+        case 'load_pills':
+            return action.payload.map(pill => ({
+                ...pill, time_to_take: new Date(pill.time_to_take),
+            }));
 
         default:
             return state;
@@ -22,10 +27,30 @@ function Pillreducer(state, action){
 
 }
 
-export function PillProvider({ children }){
-    const [state , dispatch] = useReducer(Pillreducer , []);
+export function PillProvider({ children }) {
 
-    return <PillContext.Provider value = {{ state , dispatch }} >
+    const [state, dispatch] = useReducer(Pillreducer, []);
+
+    const hasLoaded = useRef(false);
+
+    useEffect(() => {
+        const loadPills = async () => {
+            const pills = await AsyncStorage.getItem("pills");
+            if (pills) {
+                dispatch({ type: "load_pills", payload: JSON.parse(pills) });
+            }
+            hasLoaded.current = true;
+        };
+        loadPills();
+    }, []);
+
+    useEffect(() => {
+        if (!hasLoaded.current) return;
+        AsyncStorage.setItem("pills", JSON.stringify(state));
+    }, [state]);
+
+
+    return <PillContext.Provider value={{ state, dispatch }} >
         {children}
     </PillContext.Provider>
 }
