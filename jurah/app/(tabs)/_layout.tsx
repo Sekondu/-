@@ -13,12 +13,19 @@ import { Add_medecine } from '../AddMedecine';
 import { Update_medecine } from '../UpdateMedecine';
 import * as Notifications from 'expo-notifications';
 import { useEffect } from 'react';
+import { SchedulePillNotification } from '../Notifications';
+import { useFonts, RobotoSlab_400Regular, RobotoSlab_700Bold } from '@expo-google-fonts/roboto-slab';
+import { SpaceMono_400Regular, SpaceMono_700Bold } from '@expo-google-fonts/space-mono';
+import { NotoSerif_400Regular, NotoSerif_700Bold } from '@expo-google-fonts/noto-serif';
+import { ZillaSlab_400Regular, ZillaSlab_700Bold } from '@expo-google-fonts/zilla-slab';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 I18nManager.allowRTL(false);
 I18nManager.forceRTL(false);
+
+
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -50,6 +57,17 @@ function HomeScreen() {
 
 export default function full_app() {
 
+  const [fontsLoaded] = useFonts({
+    RobotoSlab_400Regular,
+    RobotoSlab_700Bold,
+    SpaceMono_400Regular,
+    SpaceMono_700Bold,
+    NotoSerif_400Regular: require("../../node_modules/@expo-google-fonts/noto-serif/400Regular/NotoSerif_400Regular.ttf"),
+    NotoSerif_700Bold: require("../../node_modules/@expo-google-fonts/noto-serif/700Bold/NotoSerif_700Bold.ttf"),
+    ZillaSlab_400Regular,
+    ZillaSlab_700Bold,
+  })
+
   useEffect(() => {
     Notifications.requestPermissionsAsync().then((res) => {
       if (res.status !== "granted") {
@@ -57,13 +75,16 @@ export default function full_app() {
       }
     })
   }, [])
+
+  if (!fontsLoaded) return null;
+
+
   return <SafeAreaProvider>
     <PillProvider>
-      <StatusBar backgroundColor={"#FFF"} barStyle="dark-content" translucent={false} />
       <Stack.Navigator>
         <Stack.Screen name="Main Tabs" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="add_medecine" component={Add_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "lightgreen" } }} />
-        <Stack.Screen name="update_medecine" component={Update_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "lightgreen" } }} />
+        <Stack.Screen name="add_medecine" component={Add_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+        <Stack.Screen name="update_medecine" component={Update_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
       </Stack.Navigator>
     </PillProvider>
   </SafeAreaProvider>

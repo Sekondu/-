@@ -7,6 +7,13 @@ export async function SchedulePillNotification(pill) {
 
     const pillTime = new Date(pill.time_to_take);
 
+    const now = new Date();
+    const trigger = new Date(pillTime);
+    trigger.setMinutes(trigger.getMinutes() - 10);
+    if (trigger <= now) {
+        trigger.setDate(trigger.getDate() + 1);
+    }
+
     await Notifications.scheduleNotificationAsync({
         identifier: pill.id,
         content: {
@@ -14,13 +21,11 @@ export async function SchedulePillNotification(pill) {
             body: `Take your ${pill.Name} pill in 10 minutes`,
         },
         trigger: {
-            type: SchedulableTriggerInputTypes.DAILY,
-            hour: pillTime.getMinutes() >= 10
-                ? pillTime.getHours()
-                : pillTime.getHours() === 0 ? 23 : pillTime.getHours() - 1,
-            minute: pillTime.getMinutes() >= 10 ? pillTime.getMinutes() - 10 : pillTime.getMinutes() + 50,
+            type: SchedulableTriggerInputTypes.DATE,
+            date: trigger,
         }
     })
+    console.log("notification set to " + trigger.getHours() + " " + trigger.getMinutes());
 
 }
 

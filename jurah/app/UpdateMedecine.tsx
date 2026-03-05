@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons"
 import { v4 as uuidv4 } from 'uuid'
 import 'react-native-get-random-values';
 import { SchedulePillNotification } from './Notifications';
+import { cancelScheduleNotification } from "./Notifications"
 export function Update_medecine({ navigation, route }) {
 
     const { id } = route.params;
@@ -33,6 +34,7 @@ export function Update_medecine({ navigation, route }) {
 
     function handleDelete(){
         dispatch({type : "remove_medecine" , payload : medecine});
+        cancelScheduleNotification(medecine);
         navigation.goBack();
     }
 
@@ -60,6 +62,7 @@ export function Update_medecine({ navigation, route }) {
             }
             dispatch({ type: "update_medecine", payload });
             SchedulePillNotification(payload);
+            console.log("updated time for : " + Name + " to : " + time.getHours() + " " + time.getMinutes());
             navigation.goBack();
         }
     }

@@ -45,10 +45,6 @@ export default function ModalScreen() {
   }, [takenPills]);
 
 
-  useEffect(() => {
-    AsyncStorage.setItem(todayKey, JSON.stringify([...takenPills]));
-  }, [takenPills]);
-
 
   const morningPillHours = [...new Set(morningPills.map(pill => pill.time_to_take.getHours()))].sort((a, b) => a - b);
   const eveningPillHours = [...new Set(eveningPills.map(pill => pill.time_to_take.getHours()))].sort((a, b) => a - b);
@@ -129,7 +125,7 @@ export default function ModalScreen() {
           dateKey: start_of_week.toISOString().split("T")[0],
         }
       );
-      console.log(week);
+      console.log(activeDateKey);
       start_of_week.setDate(start_of_week.getDate() + 1);
     }
 
@@ -167,13 +163,13 @@ export default function ModalScreen() {
           <Text style={{ fontWeight: "bold", fontSize: width * 0.05 }}>{long_Active_name}`s Schedule</Text>
         }
         <View style={styles.morning_pills}>
-          <View>
-            <Text style={{ fontWeight: "bold", color: "#50956c", fontSize: width * 0.04 }}>Morning</Text>
-            <View style={{ width: "70%", height: 0.5, backgroundColor: "grey", position: "absolute", top: "50%", left: "27%" }}></View>
+          <View style={{ display: "flex", gap: 10, justifyContent: "start", alignItems: "center", width: "100%", flexDirection: "row" }}>
+            <Text style={{ fontWeight: "bold", color: "#50956c", fontSize: width * 0.04, textAlign: "center" }}>Morning</Text>
+            <View style={{ flex: 1, height: 0.6, marginTop: 3, backgroundColor: "grey", alignSelf: "center" }}></View>
           </View>
           {morningPillHours.map((hour) => {
             return (
-              <View key={hour} style={{ marginTop: height * 0.03 }}>
+              <View key={hour} style={{ marginTop: height * 0.03, display: "flex", gap: 10 }}>
                 {morningPills.map(pill => {
                   return pill.time_to_take.getHours() == hour && (
                     <View key={pill.id} style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", padding: width * 0.03, alignItems: "space-around", borderWidth: 1, borderRadius: 10 }}>
@@ -182,7 +178,7 @@ export default function ModalScreen() {
                         <View style={{ alignSelf: "center" }}>
                           <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: width * 0.02, marginBottom: height * 0.01 }}>
                             <Text style={{ fontWeight: "bold", fontSize: width * 0.05, }}>{pill.Name}</Text>
-                            <Text allowFontScaling={false} style={{ fontSize: width * 0.03, backgroundColor: "#50956c", borderRadius: 10, padding: width * 0.015, textAlign: "center", color: "white", alignSelf: "center" }}>{pill.time_to_take.getHours() % 12} : {pill.time_to_take.getMinutes() < 10 ? "0" + pill.time_to_take.getMinutes() : pill.time_to_take.getMinutes()} PM</Text>
+                            <Text allowFontScaling={false} style={{ fontSize: width * 0.03, backgroundColor: "#50956c", borderRadius: 10, padding: width * 0.015, textAlign: "center", color: "white", alignSelf: "center" }}>{pill.time_to_take.getHours() % 12} : {pill.time_to_take.getMinutes() < 10 ? "0" + pill.time_to_take.getMinutes() : pill.time_to_take.getMinutes()} AM</Text>
                           </View>
                           <Text style={{ opacity: 0.5, fontSize: width * 0.035 }}>● {pill.more_info != "" ? pill.more_info : "no extra info specified"}</Text>
                         </View>
@@ -205,24 +201,24 @@ export default function ModalScreen() {
         </View>
 
         <View style={styles.morning_pills}>
-          <View>
-            <Text style={{ fontWeight: "bold", color: "#50956c", fontSize: width * 0.04 }}>Afternoon</Text>
-            <View style={{ width: "68%", height: 0.5, backgroundColor: "grey", position: "absolute", top: "50%", left: "32%" }}></View>
+          <View style={{ display: "flex", gap: 10, justifyContent: "start", alignItems: "center", width: "100%", flexDirection: "row" }}>
+            <Text style={{ fontWeight: "bold", color: "#50956c", fontSize: width * 0.04, textAlign: "center" }}>Afternoon</Text>
+            <View style={{ flex: 1, height: 0.6, marginTop: 3, backgroundColor: "grey", alignSelf: "center" }}></View>
           </View>
           {eveningPillHours.map((hour) => {
             return (
-              <View key={hour} style={{ marginTop: height * 0.03 }}>
+              <View key={hour} style={{ marginTop: height * 0.03, display: "flex", gap: 10 }}>
                 {eveningPills.map(pill => {
                   return pill.time_to_take.getHours() == hour && (
                     <View key={pill.id} style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", padding: width * 0.03, alignItems: "space-around", borderWidth: 1, borderRadius: 10 }}>
                       <View style={{ display: "flex", flexDirection: "row" }}>
-                        <Ionicons name="bandage-outline" style={{ width: width * 0.12, height: width * 0.12, borderRadius: 10, borderWidth: 1, padding: width * 0.02, backgroundColor: "lightgreen", marginRight: width * 0.03, alignSelf: "center" }} size={width * 0.06} />
+                        <Ionicons name="bandage-outline" style={{ width: width * 0.12, height: width * 0.12, borderRadius: 10, borderWidth: 1, padding: width * 0.025, backgroundColor: "lightgreen", marginRight: width * 0.03, alignSelf: "center" }} size={width * 0.06} />
                         <View style={{ alignSelf: "center" }}>
                           <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: width * 0.02, marginBottom: height * 0.01 }}>
                             <Text style={{ fontWeight: "bold", fontSize: width * 0.05, }}>{pill.Name}</Text>
                             <Text allowFontScaling={false} style={{ fontSize: width * 0.03, backgroundColor: "#50956c", borderRadius: 10, padding: width * 0.015, textAlign: "center", color: "white", alignSelf: "center" }}>{pill.time_to_take.getHours() % 12} : {pill.time_to_take.getMinutes() < 10 ? "0" + pill.time_to_take.getMinutes() : pill.time_to_take.getMinutes()} PM</Text>
                           </View>
-                          <Text style={{ opacity: 0.5, fontSize: width * 0.035 }}>● {pill.more_info != "" ? pill.more_info : "no extra info specified"}</Text>
+                          <Text style={{ opacity: 0.5, fontSize: width * 0.032 }}>● {pill.more_info != "" ? pill.more_info : "no extra info specified"}</Text>
                         </View>
                       </View>
                       <View style={{ alignSelf: "center" }}>
@@ -245,7 +241,7 @@ export default function ModalScreen() {
     )
   }
   return (
-    <View style={{ flex: 1, backgroundColor: "white" }}>
+    <View style={{ flex: 1, backgroundColor: "#F9F9F9" }}>
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, width: "90%", alignSelf: "center", paddingTop: height * 0.05, paddingBottom: height * 0.1, display: "flex", gap: height * 0.06 }}>
         <Profile />
         <Week />

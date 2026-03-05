@@ -1,6 +1,7 @@
 import { useContext, useReducer, createContext, useEffect, useRef } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { SchedulePillNotification } from "./Notifications";
+import * as Notifications from 'expo-notifications';
 export const PillContext = createContext({ state: [], dispatch: () => { } });
 
 function Pillreducer(state, action) {
@@ -47,6 +48,18 @@ export function PillProvider({ children }) {
     useEffect(() => {
         if (!hasLoaded.current) return;
         AsyncStorage.setItem("pills", JSON.stringify(state));
+    }, [state]);
+
+
+    useEffect(() => {
+        const subscription = Notifications.addNotificationReceivedListener(notification => {
+            const pillId = notification.request.identifier;
+            const pill = state.find(p => p.id === pillId); // from your PillContext
+            if (pill) {
+                SchedulePillNotification(pill); // reschedules for tomorrow automatically
+            }
+        });
+        return () => subscription.remove();
     }, [state]);
 
 
