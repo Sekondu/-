@@ -27,6 +27,8 @@ export default function ModalScreen() {
   const morningPills = state.filter(pill => pill.time_to_take.getHours() < 12);
   const eveningPills = state.filter(pill => pill.time_to_take.getHours() >= 12);
 
+  const sorted_pills = [...state].sort((a, b) => a.time_to_take.getHours() - b.time_to_take.getHours());
+
   const todayKey = `taken_${new Date().toISOString().split("T")[0]}`;
 
   useEffect(() => {
@@ -43,6 +45,14 @@ export default function ModalScreen() {
       AsyncStorage.setItem(`taken_${activeDateKey}`, JSON.stringify([...takenPills]));
     }
   }, [takenPills]);
+
+  function getWeekNumber(date: Date = new Date()): number {
+    const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+    const dayNum = d.getUTCDay() || 7; // Make Sunday = 7
+    d.setUTCDate(d.getUTCDate() + 4 - dayNum); // Set to nearest Thursday
+    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+    return Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  }
 
 
 
@@ -91,15 +101,7 @@ export default function ModalScreen() {
 
     return (
       <View style={styles.profile}>
-        <View style={styles.profileLeft}>
-          <Ionicons style={styles.profileIcon} name="person-circle" size={width * 0.12} color={"#50956c"} />
-          <View style={[styles.ActiveUser, { width: width * 0.04, height: width * 0.04, top: width * 0.08, left: width * 0.08 }]}></View>
-          <View>
-            <Text allowFontScaling={false} style={[styles.gm, { fontSize: width * 0.045 }]}>Good Morning,</Text>
-            <Text allowFontScaling={false} style={[styles.gm, { color: "black", alignSelf: "flex-start", fontSize: width * 0.045 }]}>User!</Text>
-          </View>
-        </View>
-        <Ionicons style={styles.notificationBell} name="notifications-circle" size={width * 0.12} color={"#50956c"} />
+        <Text style={{ fontFamily: "ZillaSlab_700Bold", fontSize: width * 0.1, textAlign: "center" }}>Schedule</Text>
       </View>
     )
   }
@@ -130,23 +132,26 @@ export default function ModalScreen() {
     }
 
     return (
-      <ScrollView contentContainerStyle={styles.fullWeekContainer}>
-        <Text style={{ fontWeight: "bold", fontSize: width * 0.05, textAlign: "center" }}>{months[today.getMonth()]} {today.getFullYear()}</Text>
-        <ScrollView ref={scrollRef} horizontal showsHorizontalScrollIndicator={false} onScroll={(e) => scrollY.current = e.nativeEvent.contentOffset.x}>
+      <View style={[styles.fullWeekContainer, { flexGrow: 0 }]}>
+        <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", flexGrow: 0 }}>
+          <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.04, textAlign: "center" }}>{months[today.getMonth()]} {today.getFullYear()}</Text>
+          <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.04, textAlign: "center" }}>week {getWeekNumber()}</Text>
+        </View>
+        <ScrollView contentContainerStyle={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }} ref={scrollRef} horizontal showsHorizontalScrollIndicator={false} onScroll={(e) => scrollY.current = e.nativeEvent.contentOffset.x}>
           {week.map((day, index) => {
             return (
               <TouchableOpacity onPress={() => {
                 setactiveDay(day.dayName);
                 setActiveDateKey(day.dateKey);
-              }} key={index} style={[styles.weekDays, { width: width * 0.2, height: height * 0.12, marginRight: width * 0.02, marginTop: height * 0.03, padding: width * 0.02, gap: height * 0.01, backgroundColor: activeDay == day.dayName ? "#50956c" : "white" }]}>
-                <Text allowFontScaling={false} style={{ color: activeDay == day.dayName ? "white" : "#50956c", fontWeight: "bold", fontSize: width * 0.04 }}>{day.dayName}</Text>
-                <Text allowFontScaling={false} style={{ fontWeight: "bold", color: activeDay == day.dayName ? "white" : "black", fontSize: width * 0.04 }}>{day.monthDay}</Text>
-                <Text allowFontScaling={false} style={{ fontWeight: "bold", color: activeDay == day.dayName ? "white" : "black", fontSize: width * 0.04 }}>{day.monthName}</Text>
+              }} key={index} style={[styles.weekDays, { width: width * 0.11, height: height * 0.12, marginRight: width * 0.02, marginTop: height * 0.03, padding: width * 0.02, gap: height * 0.01 }]}>
+                <Text allowFontScaling={false} style={{ color: activeDay == day.dayName ? "#2D3436" : "lightgrey", fontWeight: "bold", fontSize: width * 0.04 }}>{day.dayName.substring(0, 1)}</Text>
+                <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", fontWeight: "bold", color: activeDay == day.dayName ? "#2D3436" : "lightgrey", fontSize: width * 0.04 }}>{day.monthDay < 10 ? `0${day.monthDay}` : day.monthDay}</Text>
+                {activeDay == day.dayName && <View style={{ position: "absolute", width: width * 0.02, aspectRatio: 1, backgroundColor: "#50956c", borderRadius: "50%", top: "90%" }}></View>}
               </TouchableOpacity>
             )
           })}
         </ScrollView>
-      </ScrollView>
+      </View>
     )
   }
   function Medecin() {
@@ -162,81 +167,26 @@ export default function ModalScreen() {
           today_name !== activeDay &&
           <Text style={{ fontWeight: "bold", fontSize: width * 0.05 }}>{long_Active_name}`s Schedule</Text>
         }
-        <View style={styles.morning_pills}>
-          <View style={{ display: "flex", gap: 10, justifyContent: "start", alignItems: "center", width: "100%", flexDirection: "row" }}>
-            <Text style={{ fontWeight: "bold", color: "#50956c", fontSize: width * 0.04, textAlign: "center" }}>Morning</Text>
-            <View style={{ flex: 1, height: 0.6, marginTop: 3, backgroundColor: "grey", alignSelf: "center" }}></View>
-          </View>
-          {morningPillHours.map((hour) => {
-            return (
-              <View key={hour} style={{ marginTop: height * 0.03, display: "flex", gap: 10 }}>
-                {morningPills.map(pill => {
-                  return pill.time_to_take.getHours() == hour && (
-                    <View key={pill.id} style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", padding: width * 0.03, alignItems: "space-around", borderWidth: 1, borderRadius: 10 }}>
-                      <View style={{ display: "flex", flexDirection: "row" }}>
-                        <Ionicons name="bandage-outline" style={{ width: width * 0.12, height: width * 0.12, borderRadius: 10, borderWidth: 1, padding: width * 0.02, backgroundColor: "lightgreen", marginRight: width * 0.03, alignSelf: "center" }} size={width * 0.06} />
-                        <View style={{ alignSelf: "center" }}>
-                          <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: width * 0.02, marginBottom: height * 0.01 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: width * 0.05, }}>{pill.Name}</Text>
-                            <Text allowFontScaling={false} style={{ fontSize: width * 0.03, backgroundColor: "#50956c", borderRadius: 10, padding: width * 0.015, textAlign: "center", color: "white", alignSelf: "center" }}>{pill.time_to_take.getHours() % 12} : {pill.time_to_take.getMinutes() < 10 ? "0" + pill.time_to_take.getMinutes() : pill.time_to_take.getMinutes()} AM</Text>
-                          </View>
-                          <Text style={{ opacity: 0.5, fontSize: width * 0.035 }}>● {pill.more_info != "" ? pill.more_info : "no extra info specified"}</Text>
-                        </View>
-                      </View>
-                      <View style={{ alignSelf: "center" }}>
-                        <Ionicons onPress={() => {
-                          if (activeDateKey == realTodayKey) {
-                            handleTaken(pill.id);
-                          }
-
-                        }} name="checkmark-circle" style={{ alignSelf: "center" }} size={width * 0.08} color={takenPills.has(pill.id) ? "#50956c" : "black"} />
-                      </View>
-                    </View>
-                  )
-                })}
+        <View style={[styles.morning_pills]}>
+          <View style={{ display: "flex", gap: 30, justifyContent: "center", alignItems: "center", width: "90%" }}>
+            {sorted_pills.map(pill => {
+              return <View style={{ display: "flex", width: "100%", alignSelf: "center", flexDirection: "row", justifyContent: "space-between" }} key={pill.id}>
+                <View style={{ alignItems: "flex-start", justifyContent: "center", width: width * 0.15 }}>
+                  <Text style={{ fontFamily: "SpaceMono_400Regular", textAlign: "start", fontSize: width * 0.04 }}>{pill.time_to_take.getHours() < 10 ? `0${pill.time_to_take.getHours()}` : pill.time_to_take.getHours()}:{pill.time_to_take.getMinutes() < 10 ? `0${pill.time_to_take.getMinutes()}` : pill.time_to_take.getMinutes()} {pill.time_to_take.getHours() < 12 ? "AM" : "PM"}</Text>
+                </View>
+                <View style={{ justifyContent: "center", width: width * 0.3 }}>
+                  <Text style={{ fontFamily: "ZillaSlab_700Bold", fontSize: width * 0.07, marginBottom: 10 }}>{pill.Name}</Text>
+                  <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.03 }}>{pill.more_info.length > 0 ? pill.more_info : "No additional info"}</Text>
+                </View>
+                {takenPills.has(pill.id) ? <Ionicons onPress={() => handleTaken(pill.id)} style={{ alignSelf: "center" }} name="checkmark-circle" size={width * 0.06} color="#50956c" /> : <TouchableOpacity style={{ alignSelf: "center" }} onPress={() => handleTaken(pill.id)} ><View style={{ alignSelf: "center", width: 20, height: 20, borderRadius: 10, backgroundColor: "white", borderWidth: 1, borderColor: "grey" }}  ></View></TouchableOpacity>}
               </View>
-            )
-          })}
-
+            })
+            }
+          </View>
+          <View style={{ position: "absolute", height: "100%", width: 1, backgroundColor: "black", left: width * 0.15 }}></View>
         </View>
 
-        <View style={styles.morning_pills}>
-          <View style={{ display: "flex", gap: 10, justifyContent: "start", alignItems: "center", width: "100%", flexDirection: "row" }}>
-            <Text style={{ fontWeight: "bold", color: "#50956c", fontSize: width * 0.04, textAlign: "center" }}>Afternoon</Text>
-            <View style={{ flex: 1, height: 0.6, marginTop: 3, backgroundColor: "grey", alignSelf: "center" }}></View>
-          </View>
-          {eveningPillHours.map((hour) => {
-            return (
-              <View key={hour} style={{ marginTop: height * 0.03, display: "flex", gap: 10 }}>
-                {eveningPills.map(pill => {
-                  return pill.time_to_take.getHours() == hour && (
-                    <View key={pill.id} style={{ display: "flex", flexDirection: "row", width: "100%", justifyContent: "space-between", padding: width * 0.03, alignItems: "space-around", borderWidth: 1, borderRadius: 10 }}>
-                      <View style={{ display: "flex", flexDirection: "row" }}>
-                        <Ionicons name="bandage-outline" style={{ width: width * 0.12, height: width * 0.12, borderRadius: 10, borderWidth: 1, padding: width * 0.025, backgroundColor: "lightgreen", marginRight: width * 0.03, alignSelf: "center" }} size={width * 0.06} />
-                        <View style={{ alignSelf: "center" }}>
-                          <View style={{ display: "flex", flexDirection: "row", alignItems: "center", gap: width * 0.02, marginBottom: height * 0.01 }}>
-                            <Text style={{ fontWeight: "bold", fontSize: width * 0.05, }}>{pill.Name}</Text>
-                            <Text allowFontScaling={false} style={{ fontSize: width * 0.03, backgroundColor: "#50956c", borderRadius: 10, padding: width * 0.015, textAlign: "center", color: "white", alignSelf: "center" }}>{pill.time_to_take.getHours() % 12} : {pill.time_to_take.getMinutes() < 10 ? "0" + pill.time_to_take.getMinutes() : pill.time_to_take.getMinutes()} PM</Text>
-                          </View>
-                          <Text style={{ opacity: 0.5, fontSize: width * 0.032 }}>● {pill.more_info != "" ? pill.more_info : "no extra info specified"}</Text>
-                        </View>
-                      </View>
-                      <View style={{ alignSelf: "center" }}>
-                        <Ionicons onPress={() => {
-                          if (activeDateKey == realTodayKey) {
-                            handleTaken(pill.id);
-                          }
 
-                        }} name="checkmark-circle" size={width * 0.08} color={takenPills.has(pill.id) ? "#50956c" : "black"} />
-                      </View>
-                    </View>
-                  )
-                })}
-              </View>
-            )
-          })}
-
-        </View>
       </>
     )
   }
@@ -258,8 +208,6 @@ const months = [
 const styles = StyleSheet.create({
   profile: {
     display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
   },
   profileLeft: {
     display: 'flex',
@@ -286,10 +234,9 @@ const styles = StyleSheet.create({
   },
   fullWeekContainer: {
     display: "flex",
+    flexGrow: 0,
   },
   weekDays: {
-    borderWidth: 0.5,
-    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
   },

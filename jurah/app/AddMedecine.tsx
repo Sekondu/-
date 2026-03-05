@@ -94,7 +94,7 @@ export function Add_medecine({ navigation }) {
                                     setMissingPill(Number(text) >= 0 ? false : true);
                                 }
                             } placeholder="eg. 20" placeholderTextColor={"grey"} style={{ fontFamily: "ZillaSlab_400Regular", backgroundColor: "white", width: width * 0.65, height: height * 0.08, padding: 5, fontSize: width * 0.05, borderBottomWidth: 0.3, borderBottomColor: "grey" }} />
-                            {missingPill && <Text style={{ fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
+                            {missingPill && <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
                         </View>
                     </View>
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>

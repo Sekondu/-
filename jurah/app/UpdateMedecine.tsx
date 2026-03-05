@@ -32,8 +32,8 @@ export function Update_medecine({ navigation, route }) {
         return state.some(pill => pill.Name.toLowerCase() == name.toLowerCase());
     }
 
-    function handleDelete(){
-        dispatch({type : "remove_medecine" , payload : medecine});
+    function handleDelete() {
+        dispatch({ type: "remove_medecine", payload: medecine });
         cancelScheduleNotification(medecine);
         navigation.goBack();
     }
@@ -70,12 +70,12 @@ export function Update_medecine({ navigation, route }) {
     return <View style={{ flex: 1, backgroundColor: "transparent" }}>
         <KeyboardAvoidingView style={{ flex: 1, backgroundColor: "transparent" }} behavior={Platform.OS === "ios" ? "padding" : "height"} keyboardVerticalOffset={100}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
-                <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, paddingBottom: height * 0.1, borderRadius: 20, backgroundColor: "lightgreen", zIndex: 1, display: "flex", gap: height * 0.012 }}>
-                    <Text allowFontScaling={false} style={{ fontWeight: "bold", textAlign: "center", marginTop: height * 0.04, fontSize: width * 0.06 }}>Update Medication</Text>
+                <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{ flexGrow: 1, paddingBottom: height * 0.1, borderRadius: 20, backgroundColor: "#F9F9F9", zIndex: 1, display: "flex", gap: height * 0.012 }}>
+                    <Text allowFontScaling={false} style={{ fontFamily: "ZillaSlab_700Bold", textAlign: "center", marginTop: height * 0.04, fontSize: width * 0.07 }}>Modify Medication</Text>
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
                         <View>
-                            <Text allowFontScaling={false} style={{ marginBottom: height * 0.012, fontWeight: "bold", fontSize: width * 0.045, }}>Medication Name</Text>
-                            <TextInput allowFontScaling={false} value={medecine.Name} onChangeText={
+                            <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", marginBottom: height * 0.012, fontWeight: "bold", fontSize: width * 0.045, color: "grey" }}>Name</Text>
+                            <TextInput value={Name} allowFontScaling={false} onChangeText={
                                 (text) => {
                                     setName(text);
                                     setMissingName(Name.length > 0 ? false : true);
@@ -85,36 +85,60 @@ export function Update_medecine({ navigation, route }) {
                                     } else {
                                         setNameError(false);
                                     }
+
                                 }
-                            } placeholder="eg. Panadol" placeholderTextColor={"grey"} style={{ backgroundColor: "white", width: width * 0.65, height: height * 0.06, borderRadius: 20, padding: 5 }} />
-                            {nameError && <Text style={{ fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>Name Already Used!</Text>}
-                            {!nameError && Name.length > 0 && <Text style={{ fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold" }}>Name is Available!</Text>}
-                            {missingName && <Text style={{ fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
+                            } placeholder="eg. Panadol" placeholderTextColor={"grey"} style={{ fontFamily: "ZillaSlab_400Regular", backgroundColor: "white", width: width * 0.65, height: height * 0.08, padding: 5, fontSize: width * 0.05, borderBottomWidth: 0.3, borderBottomColor: "grey" }} />
+                            {nameError && <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>Name Already Used!</Text>}
+                            {!nameError && Name.length > 0 && <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold" }}>Name is Available!</Text>}
+                            {missingName && <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
                         </View>
                     </View>
 
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
                         <View>
-                            <Text allowFontScaling={false} style={{ marginBottom: height * 0.012, fontWeight: "bold", fontSize: width * 0.045, }}>Number of Pills</Text>
-                            <TextInput allowFontScaling={false} keyboardType="numeric" value={String(pillCount)} onChangeText={
+                            <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", marginBottom: height * 0.012, fontWeight: "bold", fontSize: width * 0.045, color: "grey" }}>Number of Pills</Text>
+                            <TextInput value={Number(pillCount).toString()} allowFontScaling={false} keyboardType="numeric" onChangeText={
                                 (text) => {
                                     setPillCount(Number(text));
                                     setMissingPill(Number(text) >= 0 ? false : true);
                                 }
-                            } placeholder="eg. 20" placeholderTextColor={"grey"} style={{ backgroundColor: "white", width: width * 0.65, height: height * 0.06, borderRadius: 20, padding: 5 }} />
-                            {missingPill && <Text style={{ fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
+                            } placeholder="eg. 20" placeholderTextColor={"grey"} style={{ fontFamily: "ZillaSlab_400Regular", backgroundColor: "white", width: width * 0.65, height: height * 0.08, padding: 5, fontSize: width * 0.05, borderBottomWidth: 0.3, borderBottomColor: "grey" }} />
+                            {missingPill && <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
                         </View>
                     </View>
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
-                        <TouchableOpacity onPress={() => { setOpenTime(true) }}>
-                            <Text allowFontScaling={false} style={{ fontWeight: "bold", backgroundColor: "#50956c", padding: 15, alignSelf: "center", borderRadius: 15, color: "white" }}>Pick Time for Notification</Text>
+                        <TouchableOpacity onPress={() => { setOpenTime(!openTime) }}>
+                            <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", fontWeight: "bold", backgroundColor: "#2D3436", padding: 15, alignSelf: "center", borderRadius: 15, color: "white", width: width * 0.65, textAlign: "center" }}>Pick Time for Notification</Text>
                         </TouchableOpacity>
+                    </View>
+                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: -20, zIndex: -1, }}>
+                        <View style={{
+                            alignSelf: "center",
+                            marginLeft: 3,
+                            marginTop: -8,
+                            width: width * 0.65,
+                            height: height * 0.05,
+                            backgroundColor: "white",
+                            display: "flex",
+                            justifyContent: "flex-end",
+                            borderBottomLeftRadius: 15,
+                            borderBottomRightRadius: 15
+                        }}>
+                            <Text allowFontScaling={false} style={{
+                                fontFamily: "SpaceMono_400Regular",
+                                textAlign: "center",
+                                textAlignVertical: "bottom",
+                                fontWeight: "bold",
+                                fontSize: width * 0.035,
+                                width: width * 0.65,
+                            }}>{time.getHours() % 12} :{time.getMinutes() < 10 ? 0 : ""}{time.getMinutes()} {time.getHours() < 12 ? "AM" : "PM"}</Text>
+                        </View>
                     </View>
                     {openTime && (
                         <TouchableWithoutFeedback onPress={() => { setOpenTime(false) }}>
                             <View
                                 style={{
-                                    position: "absolute",
+                                    //position: "absolute",
                                     top: 0,
                                     left: 0,
                                     right: 0,
@@ -123,7 +147,7 @@ export function Update_medecine({ navigation, route }) {
                                     justifyContent: "flex-end",
                                 }}
                             >
-                                <View style={{ backgroundColor: "#50956c" }}>
+                                <View style={{ backgroundColor: "#2D3436" }}>
                                     <DateTimePicker
                                         value={time}
                                         mode="time"
@@ -135,42 +159,25 @@ export function Update_medecine({ navigation, route }) {
                             </View>
                         </TouchableWithoutFeedback>
                     )}
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: -10, zIndex: -1, }}>
-                        <View style={{
-                            alignSelf: "center",
-                            marginLeft: 3,
-                            marginTop: -8,
-                            width: width * 0.5,
-                            height: height * 0.04,
-                            backgroundColor: "white",
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            borderBottomLeftRadius: 15,
-                            borderBottomRightRadius: 15
-                        }}>
-                            <Text allowFontScaling={false} style={{
-                                textAlign: "center",
-                                textAlignVertical: "bottom",
-                                fontWeight: "bold",
-                                fontSize: width * 0.035
-                            }}>{time.getHours() % 12} :{time.getMinutes() < 10 ? 0 : ""}{time.getMinutes()} {time.getHours() < 12 ? "AM" : "PM"}</Text>
-                        </View>
-                    </View>
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
                         <View>
-                            <Text allowFontScaling={false} style={{ marginBottom: height * 0.012, fontWeight: "bold", fontSize: width * 0.045, marginLeft: 5 }}>Extra Info</Text>
-                            <TextInput allowFontScaling={false} value={moreInfo} onChangeText={
+                            <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", marginBottom: height * 0.012, color: "grey", fontSize: width * 0.045, marginLeft: 5 }}>Extra Info</Text>
+                            <TextInput value={moreInfo} allowFontScaling={false} onChangeText={
                                 (text) => {
                                     setmoreInfo(text);
                                 }
-                            } placeholder="eg. Before Meal" placeholderTextColor={"grey"} style={{ backgroundColor: "white", width: width * 0.65, height: height * 0.06, borderRadius: 20, padding: 5 }} />
+                            } placeholder="eg. Before Meal" placeholderTextColor={"grey"} style={{ fontFamily: "ZillaSlab_400Regular", backgroundColor: "white", width: width * 0.65, height: height * 0.08, fontSize: width * 0.05, padding: 5, borderBottomWidth: 0.3, borderBottomColor: "grey" }} />
                         </View>
                     </View>
-                    <TouchableOpacity onPress={() => handleDelete()} style={{alignSelf : "center", marginTop : height * 0.05, backgroundColor : "red", width : "50%", borderRadius : 10}}><Text style={{textAlign : "center", padding : 10, color : "white", fontWeight : "bold"}}>Delete Pill</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={handleSubmit} style={{ width: "70%", alignSelf: "center", height: height * 0.08, backgroundColor: "green", marginTop: height * 0.1, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", borderRadius: 20, gap: 10 }}>
-                        <Ionicons name="checkmark" size={width * 0.06} style={{ alignSelf: "center", textAlign: "center" }} /><Text allowFontScaling={false} style={{ textAlign: "center", fontSize: width * 0.05 }}>Save Changes</Text>
-                    </TouchableOpacity>
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: 40 }}>
+                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center" }}>
+                        <TouchableOpacity onPress={handleSubmit} style={{ width: width * 0.65, alignSelf: "center", height: height * 0.08, backgroundColor: "white", marginTop: height * 0.05, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 10, boxShadow: "0px 0px 5px red" }}>
+                            <Text onPress={handleDelete} allowFontScaling={false} style={{ fontFamily: "ZillaSlab_400Regular", textAlign: "center", fontSize: width * 0.05 }}>Delete Pill</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center" }}>
+                        <TouchableOpacity onPress={handleSubmit} style={{ width: width * 0.65, alignSelf: "center", height: height * 0.08, backgroundColor: "white", marginTop: height * 0.05, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 10, boxShadow: "0px 0px 5px lightgrey" }}>
+                            <Ionicons name="checkmark" size={width * 0.06} style={{ alignSelf: "center", textAlign: "center" }} /><Text allowFontScaling={false} style={{ fontFamily: "ZillaSlab_400Regular", textAlign: "center", fontSize: width * 0.05 }}>Save Changes</Text>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
             </TouchableWithoutFeedback>
