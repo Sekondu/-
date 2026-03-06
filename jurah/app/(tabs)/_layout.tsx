@@ -18,6 +18,9 @@ import { useFonts, RobotoSlab_400Regular, RobotoSlab_700Bold } from '@expo-googl
 import { SpaceMono_400Regular, SpaceMono_700Bold } from '@expo-google-fonts/space-mono';
 import { NotoSerif_400Regular, NotoSerif_700Bold } from '@expo-google-fonts/noto-serif';
 import { ZillaSlab_400Regular, ZillaSlab_700Bold } from '@expo-google-fonts/zilla-slab';
+import { ScheduleProvider } from '../ScheduleContext';
+import { Add_schedule } from '../AddSchedule';
+import { Update_schedule } from '../UpdateSchedule';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -80,13 +83,17 @@ export default function full_app() {
 
 
   return <SafeAreaProvider>
-    <PillProvider>
-      <Stack.Navigator>
-        <Stack.Screen name="Main Tabs" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="add_medecine" component={Add_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-        <Stack.Screen name="update_medecine" component={Update_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-      </Stack.Navigator>
-    </PillProvider>
+    <ScheduleProvider>
+      <PillProvider>
+        <Stack.Navigator>
+          <Stack.Screen name="Main Tabs" component={HomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="add_medecine" component={Add_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+          <Stack.Screen name="update_medecine" component={Update_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+          <Stack.Screen name="add_schedule" component={Add_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+          <Stack.Screen name="update_schedule" component={Update_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+        </Stack.Navigator>
+      </PillProvider>
+    </ScheduleProvider>
   </SafeAreaProvider>
 }
 

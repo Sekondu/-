@@ -1,9 +1,11 @@
 import * as Notifications from 'expo-notifications';
 import { SchedulableTriggerInputTypes } from 'expo-notifications';
+import { useContext } from 'react';
+import { ScheduleProvider } from './ScheduleContext';
 
 export async function SchedulePillNotification(pill) {
 
-    await Notifications.cancelScheduledNotificationAsync(pill.id);
+    await Notifications.cancelScheduledNotificationAsync(pill.medicineId);
 
     const pillTime = new Date(pill.time_to_take);
 
@@ -18,7 +20,7 @@ export async function SchedulePillNotification(pill) {
         identifier: pill.id,
         content: {
             title: "Medication Reminder!",
-            body: `Take your ${pill.Name} pill in 10 minutes`,
+            body: `Take your ${pill.pillName} pill in 10 minutes`,
         },
         trigger: {
             type: SchedulableTriggerInputTypes.DATE,

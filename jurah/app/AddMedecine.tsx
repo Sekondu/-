@@ -50,10 +50,8 @@ export function Add_medecine({ navigation }) {
                 Name: Name,
                 pillCount: pillCount,
                 time_to_take: time,
-                more_info: moreInfo,
             }
             dispatch({ type: "add_medecine", payload });
-            SchedulePillNotification(payload);
             navigation.goBack();
         }
     }
@@ -150,19 +148,11 @@ export function Add_medecine({ navigation }) {
                             </View>
                         </TouchableWithoutFeedback>
                     )}
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
-                        <View>
-                            <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", marginBottom: height * 0.012, color: "grey", fontSize: width * 0.045, marginLeft: 5 }}>Extra Info</Text>
-                            <TextInput allowFontScaling={false} onChangeText={
-                                (text) => {
-                                    setmoreInfo(text);
-                                }
-                            } placeholder="eg. Before Meal" placeholderTextColor={"grey"} style={{ fontFamily: "ZillaSlab_400Regular", backgroundColor: "white", width: width * 0.65, height: height * 0.08, padding: 5, borderBottomWidth: 0.3, borderBottomColor: "grey" }} />
-                        </View>
+                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center" }}>
+                        <TouchableOpacity onPress={handleSubmit} style={{ width: width * 0.65, alignSelf: "center", height: height * 0.08, backgroundColor: "white", marginTop: height * 0.05, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 10, boxShadow: "0px 0px 5px lightgrey" }}>
+                            <Ionicons name="checkmark" size={width * 0.06} style={{ alignSelf: "center", textAlign: "center" }} /><Text allowFontScaling={false} style={{ fontFamily: "ZillaSlab_400Regular", textAlign: "center", fontSize: width * 0.05 }}>Save Changes</Text>
+                        </TouchableOpacity>
                     </View>
-                    <TouchableOpacity onPress={handleSubmit} style={{ width: width * 0.65, alignSelf: "center", height: height * 0.08, backgroundColor: "white", marginTop: height * 0.05, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 10, boxShadow: "0px 0px 5px lightgrey" }}>
-                        <Ionicons name="checkmark" size={width * 0.06} style={{ alignSelf: "center", textAlign: "center" }} /><Text allowFontScaling={false} style={{ fontFamily: "ZillaSlab_400Regular", textAlign: "center", fontSize: width * 0.05 }}>Save Changes</Text>
-                    </TouchableOpacity>
                     <View style={{ display: "flex", flexDirection: "row", width: width * 0.65, alignSelf: "center", marginTop: 40 }}>
                     </View>
                 </ScrollView>

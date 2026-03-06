@@ -7,9 +7,12 @@ import { v4 as uuidv4 } from 'uuid'
 import 'react-native-get-random-values';
 import { SchedulePillNotification } from './Notifications';
 import { cancelScheduleNotification } from "./Notifications"
+import { ScheduleContext } from "./ScheduleContext"
 export function Update_medecine({ navigation, route }) {
 
     const { id } = route.params;
+
+    const { ScheduleState, Scheduledispatch } = useContext(ScheduleContext);
 
     const { state, dispatch } = useContext(PillContext);
     const { width, height } = useWindowDimensions();
@@ -21,12 +24,9 @@ export function Update_medecine({ navigation, route }) {
     const [nameError, setNameError] = useState(false);
 
     const [openTime, setOpenTime] = useState(false);
-    const [time, setTime] = useState(medecine.time_to_take);
 
     const [missingName, setMissingName] = useState(false);
     const [missingPill, setMissingPill] = useState(false);
-
-    const [moreInfo, setmoreInfo] = useState(medecine.more_info);
 
     function check_name(name) {
         return state.some(pill => pill.Name.toLowerCase() == name.toLowerCase());
@@ -34,7 +34,15 @@ export function Update_medecine({ navigation, route }) {
 
     function handleDelete() {
         dispatch({ type: "remove_medecine", payload: medecine });
-        cancelScheduleNotification(medecine);
+        ScheduleState.map(schedule => {
+            if (schedule.medicineId == id) {
+
+                cancelScheduleNotification(schedule);
+                Scheduledispatch({ type: "remove_schedule", payload: schedule })
+
+            }
+        })
+
         navigation.goBack();
     }
 
@@ -57,12 +65,9 @@ export function Update_medecine({ navigation, route }) {
                 id: id,
                 Name: Name,
                 pillCount: pillCount,
-                time_to_take: time,
-                more_info: moreInfo,
             }
             dispatch({ type: "update_medecine", payload });
             SchedulePillNotification(payload);
-            console.log("updated time for : " + Name + " to : " + time.getHours() + " " + time.getMinutes());
             navigation.goBack();
         }
     }
@@ -106,69 +111,7 @@ export function Update_medecine({ navigation, route }) {
                             {missingPill && <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
                         </View>
                     </View>
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
-                        <TouchableOpacity onPress={() => { setOpenTime(!openTime) }}>
-                            <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", fontWeight: "bold", backgroundColor: "#2D3436", padding: 15, alignSelf: "center", borderRadius: 15, color: "white", width: width * 0.65, textAlign: "center" }}>Pick Time for Notification</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: -20, zIndex: -1, }}>
-                        <View style={{
-                            alignSelf: "center",
-                            marginLeft: 3,
-                            marginTop: -8,
-                            width: width * 0.65,
-                            height: height * 0.05,
-                            backgroundColor: "white",
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            borderBottomLeftRadius: 15,
-                            borderBottomRightRadius: 15
-                        }}>
-                            <Text allowFontScaling={false} style={{
-                                fontFamily: "SpaceMono_400Regular",
-                                textAlign: "center",
-                                textAlignVertical: "bottom",
-                                fontWeight: "bold",
-                                fontSize: width * 0.035,
-                                width: width * 0.65,
-                            }}>{time.getHours() % 12} :{time.getMinutes() < 10 ? 0 : ""}{time.getMinutes()} {time.getHours() < 12 ? "AM" : "PM"}</Text>
-                        </View>
-                    </View>
-                    {openTime && (
-                        <TouchableWithoutFeedback onPress={() => { setOpenTime(false) }}>
-                            <View
-                                style={{
-                                    //position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    backgroundColor: "transparent",
-                                    justifyContent: "flex-end",
-                                }}
-                            >
-                                <View style={{ backgroundColor: "#2D3436" }}>
-                                    <DateTimePicker
-                                        value={time}
-                                        mode="time"
-                                        display="spinner"
-                                        is24Hour={true}
-                                        onChange={onChange}
-                                    />
-                                </View>
-                            </View>
-                        </TouchableWithoutFeedback>
-                    )}
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
-                        <View>
-                            <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", marginBottom: height * 0.012, color: "grey", fontSize: width * 0.045, marginLeft: 5 }}>Extra Info</Text>
-                            <TextInput value={moreInfo} allowFontScaling={false} onChangeText={
-                                (text) => {
-                                    setmoreInfo(text);
-                                }
-                            } placeholder="eg. Before Meal" placeholderTextColor={"grey"} style={{ fontFamily: "ZillaSlab_400Regular", backgroundColor: "white", width: width * 0.65, height: height * 0.08, fontSize: width * 0.05, padding: 5, borderBottomWidth: 0.3, borderBottomColor: "grey" }} />
-                        </View>
-                    </View>
+
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center" }}>
                         <TouchableOpacity onPress={handleSubmit} style={{ width: width * 0.65, alignSelf: "center", height: height * 0.08, backgroundColor: "white", marginTop: height * 0.05, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 10, boxShadow: "0px 0px 5px red" }}>
                             <Text onPress={handleDelete} allowFontScaling={false} style={{ fontFamily: "ZillaSlab_400Regular", textAlign: "center", fontSize: width * 0.05 }}>Delete Pill</Text>

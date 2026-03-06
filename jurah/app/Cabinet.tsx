@@ -66,7 +66,7 @@ export default function Cabinet({ navigation }) {
         </View>
         <View>
             <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_700Bold", fontWeight: "bold", fontSize: width * 0.04 }}>Priority Refills</Text>
+                <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_700Bold", fontWeight: "bold", fontSize: width * 0.04 }}>All Medications</Text>
             </View>
             <View>
                 {state.length === 0 &&

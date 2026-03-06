@@ -28,6 +28,8 @@ function Pillreducer(state, action) {
 
 }
 
+
+
 export function PillProvider({ children }) {
 
     const [state, dispatch] = useReducer(Pillreducer, []);
@@ -50,17 +52,6 @@ export function PillProvider({ children }) {
         AsyncStorage.setItem("pills", JSON.stringify(state));
     }, [state]);
 
-
-    useEffect(() => {
-        const subscription = Notifications.addNotificationReceivedListener(notification => {
-            const pillId = notification.request.identifier;
-            const pill = state.find(p => p.id === pillId); // from your PillContext
-            if (pill) {
-                SchedulePillNotification(pill); // reschedules for tomorrow automatically
-            }
-        });
-        return () => subscription.remove();
-    }, [state]);
 
 
     return <PillContext.Provider value={{ state, dispatch }} >

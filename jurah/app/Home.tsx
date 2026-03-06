@@ -6,16 +6,19 @@ import { useState, useEffect, useRef, useContext } from "react";
 import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { PillContext } from "./PillContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ScheduleContext } from "./ScheduleContext";
 
 const days_of_Week = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
-export default function ModalScreen() {
+export default function ModalScreen({ navigation }) {
   const { width, height } = useWindowDimensions();
 
   let scrollRef = useRef<ScrollView | null>(null);
   let scrollY = useRef(0);
 
   const { state, dispatch } = useContext(PillContext);
+
+  const { Schedulestate, Scheduledispatch } = useContext(ScheduleContext);
 
   const [activeDay, setactiveDay] = useState("");
   const [activeDateKey, setActiveDateKey] = useState(
@@ -24,10 +27,8 @@ export default function ModalScreen() {
 
   const [takenPills, setTakenPills] = useState(new Set<string>());
 
-  const morningPills = state.filter(pill => pill.time_to_take.getHours() < 12);
-  const eveningPills = state.filter(pill => pill.time_to_take.getHours() >= 12);
 
-  const sorted_pills = [...state].sort((a, b) => a.time_to_take.getHours() - b.time_to_take.getHours());
+  const sorted_pills = [...Schedulestate].sort((a, b) => a.time_to_take.getHours() - b.time_to_take.getHours());
 
   const todayKey = `taken_${new Date().toISOString().split("T")[0]}`;
 
@@ -55,10 +56,6 @@ export default function ModalScreen() {
   }
 
 
-
-  const morningPillHours = [...new Set(morningPills.map(pill => pill.time_to_take.getHours()))].sort((a, b) => a - b);
-  const eveningPillHours = [...new Set(eveningPills.map(pill => pill.time_to_take.getHours()))].sort((a, b) => a - b);
-
   function handleTaken(id: string) {
     if (takenPills.has(id)) {
       setTakenPills(prev => {
@@ -66,16 +63,26 @@ export default function ModalScreen() {
         next.delete(id);
         return next;
       });
-      let pill = state.find(pill => pill.id == id);
-      dispatch({ type: "update_medecine", payload: { id: id, pillCount: pill.pillCount + 1, Name: pill.Name, time_to_take: pill.time_to_take, more_info: pill.more_info } });
+      let scheduledPill = Schedulestate.find(pill => pill.id == id);
+      if (!scheduledPill) return;
+      console.log(scheduledPill);
+      let pill = state.find(pill => pill.id == scheduledPill.medicineId);
+      if (!pill) return;
+      console.log(pill);
+      dispatch({ type: "update_medecine", payload: { id: pill.id, pillCount: pill.pillCount + scheduledPill.dosage, Name: pill.Name, more_info: pill.more_info } });
     } else {
       setTakenPills(prev => {
         const next = new Set(prev);
         next.add(id);
         return next;
       });
-      let pill = state.find(pill => pill.id == id);
-      dispatch({ type: "update_medecine", payload: { id: id, pillCount: pill.pillCount > 0 ? pill.pillCount - 1 : 0, Name: pill.Name, time_to_take: pill.time_to_take, more_info: pill.more_info } });
+      let scheduledPill = Schedulestate.find(pill => pill.id == id);
+      if (!scheduledPill) return;
+      console.log(scheduledPill);
+      let pill = state.find(pill => pill.id == scheduledPill.medicineId);
+      if (!pill) return;
+      console.log(pill);
+      dispatch({ type: "update_medecine", payload: { id: pill.id, pillCount: pill.pillCount > 0 && pill.pillCount - scheduledPill.dosage > 0 ? pill.pillCount - scheduledPill.dosage : 0, Name: pill.Name, more_info: pill.more_info } });
     }
   }
 
@@ -172,13 +179,13 @@ export default function ModalScreen() {
             {sorted_pills.map(pill => {
               return <View style={{ display: "flex", width: "100%", alignSelf: "center", flexDirection: "row", justifyContent: "space-between" }} key={pill.id}>
                 <View style={{ alignItems: "flex-start", justifyContent: "center", width: width * 0.15 }}>
-                  <Text style={{ fontFamily: "SpaceMono_400Regular", textAlign: "start", fontSize: width * 0.04 }}>{pill.time_to_take.getHours() < 10 ? `0${pill.time_to_take.getHours()}` : pill.time_to_take.getHours()}:{pill.time_to_take.getMinutes() < 10 ? `0${pill.time_to_take.getMinutes()}` : pill.time_to_take.getMinutes()} {pill.time_to_take.getHours() < 12 ? "AM" : "PM"}</Text>
+                  <Text style={{ fontFamily: "SpaceMono_400Regular", textAlign: "start", fontSize: width * 0.04 }}>{pill.time_to_take.getHours() < 10 ? `0${pill.time_to_take.getHours()}` : pill.time_to_take.getHours() % 12}:{pill.time_to_take.getMinutes() < 10 ? `0${pill.time_to_take.getMinutes()}` : pill.time_to_take.getMinutes()} {pill.time_to_take.getHours() < 12 ? "AM" : "PM"}</Text>
                 </View>
-                <View style={{ justifyContent: "center", width: width * 0.3 }}>
-                  <Text style={{ fontFamily: "ZillaSlab_700Bold", fontSize: width * 0.07, marginBottom: 10 }}>{pill.Name}</Text>
+                <TouchableOpacity onPress={() => navigation.navigate("update_schedule", { pill: pill })} style={{ justifyContent: "center", width: width * 0.3 }}>
+                  <Text style={{ fontFamily: "ZillaSlab_700Bold", fontSize: width * 0.07, marginBottom: 10 }}>{pill.pillName}</Text>
                   <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.03 }}>{pill.more_info.length > 0 ? pill.more_info : "No additional info"}</Text>
-                </View>
-                {takenPills.has(pill.id) ? <Ionicons onPress={() => handleTaken(pill.id)} style={{ alignSelf: "center" }} name="checkmark-circle" size={width * 0.06} color="#50956c" /> : <TouchableOpacity style={{ alignSelf: "center" }} onPress={() => handleTaken(pill.id)} ><View style={{ alignSelf: "center", width: 20, height: 20, borderRadius: 10, backgroundColor: "white", borderWidth: 1, borderColor: "grey" }}  ></View></TouchableOpacity>}
+                </TouchableOpacity>
+                {takenPills.has(pill.id) ? <Ionicons onPress={() => handleTaken(pill.id)} style={{ alignSelf: "center" }} name="checkmark-circle" size={width * 0.06} color="#50956c" /> : <TouchableOpacity style={{ alignSelf: "center" }} onPress={() => handleTaken(pill.id)} ><View style={{ alignSelf: "center", width: width * 0.06, height: width * 0.06, borderRadius: width * 0.03, backgroundColor: "white", borderWidth: 1, borderColor: "grey" }}  ></View></TouchableOpacity>}
               </View>
             })
             }
@@ -192,9 +199,12 @@ export default function ModalScreen() {
   }
   return (
     <View style={{ flex: 1, backgroundColor: "#F9F9F9" }}>
-      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, width: "90%", alignSelf: "center", paddingTop: height * 0.05, paddingBottom: height * 0.1, display: "flex", gap: height * 0.06 }}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ flexGrow: 1, width: "90%", alignSelf: "center", paddingTop: height * 0.05, paddingBottom: height * 0.1, display: "flex", gap: height * 0.03 }}>
         <Profile />
         <Week />
+        <TouchableOpacity onPress={() => navigation.navigate("add_schedule")} style={{ display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#2D3436", padding: 15, alignSelf: "center", borderRadius: 15 }}>
+          <Text style={{ fontFamily: "SpaceMono_400Regular", color: "white" }}>Schedule Pill</Text>
+        </TouchableOpacity>
         <Medecin />
       </ScrollView>
     </View>
