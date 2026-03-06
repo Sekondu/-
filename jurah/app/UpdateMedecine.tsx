@@ -12,7 +12,7 @@ export function Update_medecine({ navigation, route }) {
 
     const { id } = route.params;
 
-    const { ScheduleState, Scheduledispatch } = useContext(ScheduleContext);
+    const { Schedulestate, Scheduledispatch } = useContext(ScheduleContext);
 
     const { state, dispatch } = useContext(PillContext);
     const { width, height } = useWindowDimensions();
@@ -34,7 +34,7 @@ export function Update_medecine({ navigation, route }) {
 
     function handleDelete() {
         dispatch({ type: "remove_medecine", payload: medecine });
-        ScheduleState.map(schedule => {
+        Schedulestate.map(schedule => {
             if (schedule.medicineId == id) {
 
                 cancelScheduleNotification(schedule);
@@ -67,7 +67,6 @@ export function Update_medecine({ navigation, route }) {
                 pillCount: pillCount,
             }
             dispatch({ type: "update_medecine", payload });
-            SchedulePillNotification(payload);
             navigation.goBack();
         }
     }
@@ -113,8 +112,8 @@ export function Update_medecine({ navigation, route }) {
                     </View>
 
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center" }}>
-                        <TouchableOpacity onPress={handleSubmit} style={{ width: width * 0.65, alignSelf: "center", height: height * 0.08, backgroundColor: "white", marginTop: height * 0.05, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 10, boxShadow: "0px 0px 5px red" }}>
-                            <Text onPress={handleDelete} allowFontScaling={false} style={{ fontFamily: "ZillaSlab_400Regular", textAlign: "center", fontSize: width * 0.05 }}>Delete Pill</Text>
+                        <TouchableOpacity onPress={handleDelete} style={{ width: width * 0.65, alignSelf: "center", height: height * 0.08, backgroundColor: "white", marginTop: height * 0.05, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "row", gap: 10, boxShadow: "0px 0px 5px red" }}>
+                            <Text allowFontScaling={false} style={{ fontFamily: "ZillaSlab_400Regular", textAlign: "center", fontSize: width * 0.05 }}>Delete Pill</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center" }}>
