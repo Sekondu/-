@@ -49,7 +49,7 @@ export function Add_schedule({ navigation }) {
         console.log(selectedMedicine.id);
         console.log(selectedPillId);
 
-        const alreadyScheduled = Schedulestate.find(schedule => schedule.Name == selectedMedicine.Name &&
+        const alreadyScheduled = Schedulestate.find(schedule => schedule.medicineId === selectedPillId &&
             schedule.time_to_take.getHours() == time.getHours() &&
             schedule.time_to_take.getMinutes() == time.getMinutes())
 

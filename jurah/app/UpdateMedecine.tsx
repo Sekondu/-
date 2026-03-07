@@ -67,6 +67,15 @@ export function Update_medecine({ navigation, route }) {
                 pillCount: pillCount,
             }
             dispatch({ type: "update_medecine", payload });
+
+            Schedulestate.forEach(schedule => {
+                if (schedule.medicineId === id && schedule.pillName !== Name) {
+                    const updatedSchedule = { ...schedule, pillName: Name };
+                    Scheduledispatch({ type: "update_schedule", payload: updatedSchedule });
+                    SchedulePillNotification(updatedSchedule);
+                }
+            });
+
             navigation.goBack();
         }
     }

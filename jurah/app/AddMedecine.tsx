@@ -21,7 +21,6 @@ export function Add_medecine({ navigation }) {
     const [missingName, setMissingName] = useState(false);
     const [missingPill, setMissingPill] = useState(false);
 
-    const [moreInfo, setmoreInfo] = useState("");
 
 
     function check_name(name) {
@@ -49,7 +48,6 @@ export function Add_medecine({ navigation }) {
                 id: uuidv4(),
                 Name: Name,
                 pillCount: pillCount,
-                time_to_take: time,
             }
             dispatch({ type: "add_medecine", payload });
             navigation.goBack();
@@ -94,11 +92,6 @@ export function Add_medecine({ navigation }) {
                             } placeholder="eg. 20" placeholderTextColor={"grey"} style={{ fontFamily: "ZillaSlab_400Regular", backgroundColor: "white", width: width * 0.65, height: height * 0.08, padding: 5, fontSize: width * 0.05, borderBottomWidth: 0.3, borderBottomColor: "grey" }} />
                             {missingPill && <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.038, marginTop: height * 0.006, marginLeft: width * 0.01, fontWeight: "bold", color: "red" }}>This field is Mandatory!</Text>}
                         </View>
-                    </View>
-                    <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: height * 0.05 }}>
-                        <TouchableOpacity onPress={() => { setOpenTime(!openTime) }}>
-                            <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", fontWeight: "bold", backgroundColor: "#2D3436", padding: 15, alignSelf: "center", borderRadius: 15, color: "white", width: width * 0.65, textAlign: "center" }}>Pick Time for Notification</Text>
-                        </TouchableOpacity>
                     </View>
                     <View style={{ display: "flex", flexDirection: "row", width: "70%", alignSelf: "center", marginTop: -20, zIndex: -1, }}>
                         <View style={{

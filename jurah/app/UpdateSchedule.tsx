@@ -22,7 +22,7 @@ export function Update_schedule({ navigation, route }) {
     const [moreInfo, setmoreInfo] = useState(pill.more_info);
 
     const [openTime, setOpenTime] = useState(false);
-    const [time, setTime] = useState(pill.time_to_take);
+    const [time, setTime] = useState(new Date(pill.time_to_take));
 
     const [missingPill, setMissingPill] = useState(false);
     const [missingDosage, setMissingDosage] = useState(false);
@@ -33,8 +33,8 @@ export function Update_schedule({ navigation, route }) {
     const onChange = (event, selectedTime) => {
         setOpenTime(Platform.OS === "ios");
         if (selectedTime) {
-            console.log(selectedTime.getHours());
-            setTime(selectedTime);
+
+            setTime(new Date(selectedTime));
         }
     }
 
@@ -49,14 +49,12 @@ export function Update_schedule({ navigation, route }) {
         }
 
         const selectedMedicine = state.find(p => p.id === selectedPillId);
-        console.log(selectedMedicine);
-        console.log(selectedMedicine.time_to_take.getHours());
-        console.log(selectedPillId);
 
-        let alreadyScheduled = Schedulestate.find(schedule => schedule.pillName == selectedMedicine.Name &&
+        let alreadyScheduled = Schedulestate.find(schedule => schedule.medicineId === selectedPillId &&
             schedule.time_to_take.getHours() == time.getHours() &&
-            schedule.time_to_take.getMinutes() == time.getMinutes())
-        console.log(alreadyScheduled);
+            schedule.time_to_take.getMinutes() == time.getMinutes() &&
+            schedule.id !== pill.id)
+
 
         if (!alreadyScheduled) {
             const payload = {
@@ -67,7 +65,7 @@ export function Update_schedule({ navigation, route }) {
                 time_to_take: time,
                 more_info: moreInfo,
             }
-
+            console.log(time.getHours());
 
             Scheduledispatch({ type: "update_schedule", payload });
             SchedulePillNotification(payload);

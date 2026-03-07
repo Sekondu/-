@@ -9,6 +9,8 @@ export const ScheduleContext = createContext({ Schedulestate: [], Scheduledispat
 
 function ScheduleReducer(state, action) {
 
+
+
     switch (action.type) {
         case 'add_schedule':
             const alreadyScheduled = state.some(s => (
@@ -20,7 +22,6 @@ function ScheduleReducer(state, action) {
             }
             return [...state, action.payload];
         case 'remove_schedule':
-            cancelScheduleNotification(action.payload)
             return state.filter(s => s.id !== action.payload.id);
         case 'update_schedule':
             return [...state.filter(s => s.id !== action.payload.id), action.payload];
@@ -40,14 +41,17 @@ export function ScheduleProvider({ children }) {
     const hasLoaded = useRef(false);
 
     useEffect(() => {
-        const loadSchedules = async () => {
+        const version_schedules = async () => {
+            const hasRun = await AsyncStorage.getItem("v_1.1");
+            if (!hasRun) {
+                await Notifications.cancelAllScheduledNotificationsAsync();
+                AsyncStorage.setItem("v_1.1", "1.1");
+            }
             const schedules = await AsyncStorage.getItem("schedules");
             if (schedules) {
                 const parsedSchedules = JSON.parse(schedules);
                 Scheduledispatch({ type: "load_schedules", payload: parsedSchedules });
 
-                // 1. Clear all existing OS notifications natively
-                await Notifications.cancelAllScheduledNotificationsAsync();
 
                 // 2. Loop through the loaded schedules and rebuild notifications cleanly
                 parsedSchedules.forEach((schedule: any) => {
@@ -57,22 +61,13 @@ export function ScheduleProvider({ children }) {
                 });
             }
             hasLoaded.current = true;
-        };
-
-        loadSchedules();
-
+        }
+        version_schedules();
     }, [])
 
-    useEffect(() => {
-        const subscription = Notifications.addNotificationReceivedListener(notification => {
-            const pillId = notification.request.identifier;
-            const pill = Schedulestate.find(p => p.id === pillId); // from your PillContext
-            if (pill) {
-                SchedulePillNotification(pill); // reschedules for tomorrow automatically
-            }
-        });
-        return () => subscription.remove();
-    }, [Schedulestate]);
+
+
+
 
     useEffect(() => {
         if (!hasLoaded.current) return;
