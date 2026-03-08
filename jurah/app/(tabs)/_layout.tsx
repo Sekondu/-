@@ -19,8 +19,10 @@ import { SpaceMono_400Regular, SpaceMono_700Bold } from '@expo-google-fonts/spac
 import { NotoSerif_400Regular, NotoSerif_700Bold } from '@expo-google-fonts/noto-serif';
 import { ZillaSlab_400Regular, ZillaSlab_700Bold } from '@expo-google-fonts/zilla-slab';
 import { ScheduleProvider } from '../ScheduleContext';
+import { LanguageProvider } from '../LanguageContext';
 import { Add_schedule } from '../AddSchedule';
 import { Update_schedule } from '../UpdateSchedule';
+import Settings from '../Settings';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -54,6 +56,12 @@ function HomeScreen() {
           <Ionicons name="home" size={size} color={color} />
         ),
       }} name="Home" component={modal} />
+      <Tab.Screen options={{
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="settings" size={size} color={color} />
+        ),
+      }} name="settings" component={Settings} />
     </Tab.Navigator>
   );
 }
@@ -83,17 +91,19 @@ export default function full_app() {
 
 
   return <SafeAreaProvider>
-    <ScheduleProvider>
-      <PillProvider>
-        <Stack.Navigator>
-          <Stack.Screen name="Main Tabs" component={HomeScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="add_medecine" component={Add_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-          <Stack.Screen name="update_medecine" component={Update_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-          <Stack.Screen name="add_schedule" component={Add_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-          <Stack.Screen name="update_schedule" component={Update_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-        </Stack.Navigator>
-      </PillProvider>
-    </ScheduleProvider>
+    <LanguageProvider>
+      <ScheduleProvider>
+        <PillProvider>
+          <Stack.Navigator>
+            <Stack.Screen name="Main Tabs" component={HomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="add_medecine" component={Add_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+            <Stack.Screen name="update_medecine" component={Update_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+            <Stack.Screen name="add_schedule" component={Add_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+            <Stack.Screen name="update_schedule" component={Update_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+          </Stack.Navigator>
+        </PillProvider>
+      </ScheduleProvider>
+    </LanguageProvider>
   </SafeAreaProvider>
 }
 

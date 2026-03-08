@@ -2,31 +2,35 @@ import { Text, View, ScrollView, StyleSheet, TextInput, TouchableOpacity, Toucha
 import { useContext, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { PillContext } from "./PillContext";
+import { LanguageContext } from "./LanguageContext";
+import i18n from "./i18n";
 
 export default function Cabinet({ navigation }) {
     const { width, height } = useWindowDimensions();
     const { state, dispatch } = useContext(PillContext);
     const [addMedecine, setAddMedecine] = useState(false);
+    const { language, changeLanguage } = useContext(LanguageContext);
     console.log(state);
 
     return <ScrollView style={{ backgroundColor: "#F9F9F9" }} contentContainerStyle={[{ flexGrow: 1 }, styles.whole_container]}>
-        <Text allowFontScaling={false} style={{ fontFamily: "RobotoSlab_400Regular", textAlign: "center", fontWeight: "bold", fontSize: width * 0.09, color: "#2D3436" }}>Cabinet</Text>
+        <Text allowFontScaling={false} style={{ fontFamily: language === "ar" ? undefined : "RobotoSlab_400Regular", textAlign: "center", fontWeight: "bold", fontSize: width * 0.09, color: "#2D3436" }}>{i18n.t("cabinet", { locale: language })}</Text>
         <TouchableOpacity onPress={() => navigation.navigate("add_medecine")} style={{ position: "absolute", left: "90%", width: "100%", top: `${height * 0.0012}%`, }}><Ionicons name="add" size={width * 0.09} color={"#2D3436"} /></TouchableOpacity>
-        <View style={styles.search_container}>
-            <Ionicons name="search" size={width * 0.06} color={"grey"} style={{}} />
-            <TextInput allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", width: "100%", height: height * 0.06, borderWidth: 0, fontWeight: "bold", opacity: 0.6, fontSize: width * 0.04 }} placeholder="Search Medications..." placeholderTextColor={"grey"} />
+        <View style={[styles.search_container, { flexDirection: language === " ar" ? "row-reverse" : "row" }]}>
+            {language !== "ar" && <Ionicons name="search" size={width * 0.06} color={"grey"} style={{}} />}
+            <TextInput allowFontScaling={false} style={{ fontFamily: language === "ar" ? undefined : "SpaceMono_400Regular", width: "90%", height: height * 0.06, borderWidth: 0, fontWeight: "bold", opacity: 0.6, fontSize: width * 0.04, textAlign: language === "ar" ? "right" : "left" }} placeholder={i18n.t("search", { locale: language })} placeholderTextColor={"grey"} />
+            {language === "ar" && <Ionicons name="search" size={width * 0.06} color={"grey"} style={{}} />}
         </View>
         <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
             <View style={{ width: "100%", display: "flex", flexDirection: "row", justifyContent: "space-between", borderBottomWidth: 0.3, borderBottomColor: "grey" }}>
                 <View style={{ width: "50%", padding: 20 }}>
                     <View style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "start", gap: 5 }}>
-                        <Text allowFontScaling={false} adjustsFontSizeToFit={true} numberOfLines={1} style={{ fontFamily: "SpaceMono_400Regular", color: "grey", fontWeight: "bold", width: width * 0.15, height: height * 0.022, borderRadius: 10, fontSize: width * 0.035 }}>Active</Text>
+                        <Text allowFontScaling={false} adjustsFontSizeToFit={true} numberOfLines={1} style={{ fontFamily: language === "ar" ? undefined : "SpaceMono_400Regular", color: "grey", fontWeight: "bold", width: width * 0.15, height: height * 0.022, borderRadius: 10, fontSize: width * 0.035 }}>{i18n.t("active", { locale: language })}</Text>
                         <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", fontWeight: "bold", fontSize: width * 0.06, paddingLeft: width * 0.02 }}>{state.length}</Text>
                     </View>
                 </View>
                 <View style={{ width: "50%", padding: 20 }}>
                     <View style={{ display: "flex", justifyContent: "space-between", width: "100%", alignItems: "flex-end", gap: 5 }}>
-                        <Text allowFontScaling={false} adjustsFontSizeToFit={true} numberOfLines={1} style={{ fontFamily: "SpaceMono_400Regular", color: "grey", fontWeight: "bold", width: width * 0.15, height: height * 0.022, borderRadius: 10, fontSize: width * 0.035 }}>Action</Text>
+                        <Text allowFontScaling={false} adjustsFontSizeToFit={true} numberOfLines={1} style={{ fontFamily: language === "ar" ? undefined : "SpaceMono_400Regular", color: "grey", fontWeight: "bold", width: width * 0.15, height: height * 0.022, borderRadius: 10, fontSize: width * 0.035 }}>{i18n.t("action", { locale: language })}</Text>
                         <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_400Regular", fontWeight: "bold", fontSize: width * 0.06, paddingRight: width * 0.07, color: "red" }}>{state.filter(medecine => medecine.pillCount <= 5).length}</Text>
                     </View>
                 </View>
@@ -34,12 +38,12 @@ export default function Cabinet({ navigation }) {
         </View>
         <View>
             <View style={{ display: "flex", flexDirection: "row", alignItems: "center", marginTop: `${height * 0.05}` }}>
-                <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_700Bold", fontWeight: "bold", fontSize: width * 0.04 }}>Priority Refills</Text>
+                <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_700Bold", fontWeight: "bold", fontSize: width * 0.04, textAlign: language === "ar" ? "right" : "left", width: "100%" }}>{i18n.t("priority_refills", { locale: language })}</Text>
             </View>
             <View>
                 {state.filter(medecine => medecine.pillCount <= 5).length === 0 &&
                     <View>
-                        <Text style={{ fontFamily: "SpaceMono_400Regular", width: "100%", color: "grey", textAlign: "center", marginTop: height * 0.04, fontSize: width * 0.035 }}>No Medecines To Refill!</Text>
+                        <Text style={{ fontFamily: language === "ar" ? undefined : "SpaceMono_400Regular", width: "100%", color: "grey", textAlign: "center", marginTop: height * 0.04, fontSize: width * 0.035 }}>{i18n.t("no_refill_medecines", { locale: language })}</Text>
                     </View>}
                 {state.filter(medecine => medecine.pillCount <= 5).length > 0 &&
                     <View style={{ marginTop: height * 0.02, display: "flex", width: "100%" }}>
@@ -66,13 +70,13 @@ export default function Cabinet({ navigation }) {
         </View>
         <View>
             <View style={{ display: "flex", flexDirection: "row", alignItems: "center" }}>
-                <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_700Bold", fontWeight: "bold", fontSize: width * 0.04 }}>All Medications</Text>
+                <Text allowFontScaling={false} style={{ fontFamily: "SpaceMono_700Bold", fontWeight: "bold", fontSize: width * 0.04, width: "100%", textAlign: language === "ar" ? "right" : "left" }}>{i18n.t("all_medications", { locale: language })}</Text>
             </View>
             <View>
                 {state.length === 0 &&
                     <View>
                         <TouchableOpacity onPress={(() => navigation.navigate("add_medecine"))}>
-                            <Text style={{ width: width * 0.5, textAlign: "center", marginTop: height * 0.04, fontWeight: "bold", fontSize: width * 0.045, backgroundColor: "lightgreen", alignSelf: "center", borderRadius: 10, padding: 10 }}>Add yout first Medecine</Text>
+                            <Text style={{ width: width * 0.5, textAlign: "center", marginTop: height * 0.04, fontWeight: "bold", fontSize: width * 0.045, backgroundColor: "lightgreen", alignSelf: "center", borderRadius: 10, padding: 10 }}>{i18n.t("add_first_medecine", { locale: language })}</Text>
                         </TouchableOpacity>
                     </View>}
                 {state.length > 0 &&
@@ -114,7 +118,6 @@ const styles = StyleSheet.create({
     },
     search_container: {
         display: "flex",
-        flexDirection: "row",
         alignItems: "center",
         width: "100%",
         height: 50,

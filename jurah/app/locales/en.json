@@ -1,0 +1,23 @@
+{
+    "language": "Language",
+    "settings": "Settings",
+    "english": "English",
+    "arabic": "Arabic",
+    "cabinet": "cabinet",
+    "search": "Search Medications",
+    "active": "Active",
+    "action": "Action",
+    "priority_refills": "Priority Refills",
+    "no_refill_medecines": "All Medecines are good!",
+    "all_medications": "All Medications",
+    "add_first_medecine": "Add your first Medecine",
+    "add_medication": "Add Medication",
+    "medication_name_input": "Name",
+    "medication_name_placeholder": "eg: Panadol",
+    "medication_pill_number_input": "Number of Pills",
+    "medication_pill_number_placeholder": "eg: 20",
+    "save_medecine": "Save",
+    "edit_medication": "Edit Medication",
+    "delete_pill": "Delete Pill",
+    "save_edit_changes": "Save changes"
+}

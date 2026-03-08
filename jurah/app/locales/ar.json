@@ -1,0 +1,23 @@
+{
+    "language": "اللغة",
+    "settings": "الإعدادات",
+    "english": "الإنجليزية",
+    "arabic": "العربية",
+    "cabinet": "صيدلية",
+    "search": "البحث عن ادوية...",
+    "active": "نشط",
+    "action": "منخفض",
+    "priority_refills": "اولوية للتعبئة",
+    "no_refill_medecines": "جميع الادوية جيدة!",
+    "all_medications": "جميع الادوية",
+    "add_first_medecine": "قم باضافة اول دواء",
+    "add_medication": "اضافة دواء",
+    "medication_name_input": "الاسم",
+    "medication_name_placeholder": "مثال: بانادول",
+    "medication_pill_number_input": "عدد الكبسولات",
+    "medication_pill_number_placeholder": "مثال: 20",
+    "save_medecine": "اضافة",
+    "edit_medication": "تعديل الدواء",
+    "delete_pill": "ازالة الدواء",
+    "save_edit_changes": "حفظ التعديلات"
+}
