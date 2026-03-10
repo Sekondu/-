@@ -30,7 +30,8 @@ export async function SchedulePillNotification(pill) {
             type: SchedulableTriggerInputTypes.DAILY,
             hour: triggerHour,
             minute: triggerMinute,
-        }
+        },
+
     })
     console.log(await Notifications.getAllScheduledNotificationsAsync());
     console.log("notification set to " + triggerHour + ":" + triggerMinute);

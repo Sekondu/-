@@ -7,8 +7,11 @@ import { TouchableOpacity, useWindowDimensions } from "react-native";
 import { PillContext } from "./PillContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ScheduleContext } from "./ScheduleContext";
+import { LanguageContext } from "./LanguageContext";
+import i18n from "./i18n";
 
 const days_of_Week = ["Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+const days_of_Week_arabic = ["السبت", "الاحد", "الاثنين", "الثلثاء", "الاربعاء", "الخميس", "الجمعة"];
 
 export default function ModalScreen({ navigation }) {
   const { width, height } = useWindowDimensions();
@@ -19,6 +22,8 @@ export default function ModalScreen({ navigation }) {
   const { state, dispatch } = useContext(PillContext);
 
   const { Schedulestate, Scheduledispatch } = useContext(ScheduleContext);
+
+  const { language, changeLanguage } = useContext(LanguageContext);
 
   const [activeDay, setactiveDay] = useState("");
   const [activeDateKey, setActiveDateKey] = useState(
@@ -108,7 +113,7 @@ export default function ModalScreen({ navigation }) {
 
     return (
       <View style={styles.profile}>
-        <Text style={{ fontFamily: "ZillaSlab_700Bold", fontSize: width * 0.1, textAlign: "center" }}>Schedule</Text>
+        <Text style={{ fontFamily: "ZillaSlab_700Bold", fontSize: width * 0.1, textAlign: "center" }}>{i18n.t("home_header", { locale: language })}</Text>
       </View>
     )
   }
@@ -141,8 +146,8 @@ export default function ModalScreen({ navigation }) {
     return (
       <View style={[styles.fullWeekContainer, { flexGrow: 0 }]}>
         <View style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", flexGrow: 0 }}>
-          <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.04, textAlign: "center" }}>{months[today.getMonth()]} {today.getFullYear()}</Text>
-          <Text style={{ fontFamily: "SpaceMono_400Regular", fontSize: width * 0.04, textAlign: "center" }}>week {getWeekNumber()}</Text>
+          <Text style={{ fontFamily: language === "ar" ? undefined : "SpaceMono_400Regular", fontSize: width * 0.04, textAlign: "center" }}>{today.toLocaleDateString(language === "ar" ? "ar" : "en-US", { month: "long" })} {today.getFullYear()}</Text>
+          <Text style={{ fontFamily: language === "ar" ? undefined : "SpaceMono_400Regular", fontSize: width * 0.04, textAlign: "center" }}>{language === "ar" ? "الاسبوع" : "week"} {getWeekNumber()}</Text>
         </View>
         <ScrollView contentContainerStyle={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }} ref={scrollRef} horizontal showsHorizontalScrollIndicator={false} onScroll={(e) => scrollY.current = e.nativeEvent.contentOffset.x}>
           {week.map((day, index) => {
@@ -168,11 +173,11 @@ export default function ModalScreen({ navigation }) {
     return (
       <>
         {today_name === activeDay &&
-          <Text style={{ fontWeight: "bold", fontSize: width * 0.05 }}>Today`s Schedule</Text>
+          <Text style={{ fontWeight: "bold", fontSize: width * 0.05, textAlign: language === "ar" ? "right" : "left" }}>{language === "ar" ? "جدول اليوم" : "Today's Schedule"}</Text>
         }
         {
           today_name !== activeDay &&
-          <Text style={{ fontWeight: "bold", fontSize: width * 0.05 }}>{long_Active_name}`s Schedule</Text>
+          <Text style={{ fontWeight: "bold", fontSize: width * 0.05, textAlign: language === "ar" ? "right" : "left" }}>{language === "ar" ? `جدول ${days_of_Week_arabic[days_of_Week.indexOf(long_Active_name[0])]}` : `${long_Active_name[0]}'s Schedule`} </Text>
         }
         <View style={[styles.morning_pills]}>
           <View style={{ display: "flex", gap: 30, justifyContent: "center", alignItems: "center", width: "90%" }}>
@@ -203,7 +208,7 @@ export default function ModalScreen({ navigation }) {
         <Profile />
         <Week />
         <TouchableOpacity onPress={() => navigation.navigate("add_schedule")} style={{ display: "flex", justifyContent: "center", alignItems: "center", backgroundColor: "#2D3436", padding: 15, alignSelf: "center", borderRadius: 15 }}>
-          <Text style={{ fontFamily: "SpaceMono_400Regular", color: "white" }}>Schedule Pill</Text>
+          <Text style={{ fontFamily: language === "ar" ? undefined : "SpaceMono_400Regular", color: "white" }}>{language === "ar" ? "موعد جديد" : "Schedule Pill"}</Text>
         </TouchableOpacity>
         <Medecin />
       </ScrollView>

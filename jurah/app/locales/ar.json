@@ -19,5 +19,6 @@
     "save_medecine": "اضافة",
     "edit_medication": "تعديل الدواء",
     "delete_pill": "ازالة الدواء",
-    "save_edit_changes": "حفظ التعديلات"
+    "save_edit_changes": "حفظ التعديلات",
+    "home_header": "الجدول"
 }

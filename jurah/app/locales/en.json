@@ -19,5 +19,6 @@
     "save_medecine": "Save",
     "edit_medication": "Edit Medication",
     "delete_pill": "Delete Pill",
-    "save_edit_changes": "Save changes"
+    "save_edit_changes": "Save changes",
+    "home_header": "Schedule"
 }
