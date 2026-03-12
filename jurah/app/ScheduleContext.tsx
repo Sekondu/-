@@ -54,10 +54,11 @@ export function ScheduleProvider({ children }) {
 
 
                 // 2. Loop through the loaded schedules and rebuild notifications cleanly
+                const savedLanguage = await AsyncStorage.getItem('appLanguage') || 'en';
                 parsedSchedules.forEach((schedule: any) => {
                     // Need to convert the string back to a Date object first just like the reducer does
                     const rebuiltSchedule = { ...schedule, time_to_take: new Date(schedule.time_to_take) };
-                    SchedulePillNotification(rebuiltSchedule);
+                    SchedulePillNotification(rebuiltSchedule, savedLanguage);
                 });
             }
             hasLoaded.current = true;

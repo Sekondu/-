@@ -1,15 +1,10 @@
 import * as Notifications from 'expo-notifications';
 import { SchedulableTriggerInputTypes } from 'expo-notifications';
-import { useContext, useEffect } from 'react';
-import { ScheduleProvider } from './ScheduleContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { LanguageContext } from './LanguageContext';
-export async function SchedulePillNotification(pill) {
 
+export async function SchedulePillNotification(pill, language: string = 'en') {
 
     await Notifications.cancelScheduledNotificationAsync(pill.id);
-
-    const { language } = useContext(LanguageContext);
 
     const pillTime = new Date(pill.time_to_take);
 
@@ -33,7 +28,6 @@ export async function SchedulePillNotification(pill) {
             hour: triggerHour,
             minute: triggerMinute,
         },
-
     })
     console.log(await Notifications.getAllScheduledNotificationsAsync());
     console.log("notification set to " + triggerHour + ":" + triggerMinute);

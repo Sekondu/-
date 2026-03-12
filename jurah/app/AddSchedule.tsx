@@ -67,7 +67,7 @@ export function Add_schedule({ navigation }) {
             }
 
             Scheduledispatch({ type: "add_schedule", payload });
-            SchedulePillNotification(payload);
+            SchedulePillNotification(payload, language);
             navigation.goBack();
         }
         setAlreadyAdded(false);

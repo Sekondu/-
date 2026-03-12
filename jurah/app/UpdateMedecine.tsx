@@ -78,7 +78,7 @@ export function Update_medecine({ navigation, route }) {
                 if (schedule.medicineId === id && schedule.pillName !== Name) {
                     const updatedSchedule = { ...schedule, pillName: Name };
                     Scheduledispatch({ type: "update_schedule", payload: updatedSchedule });
-                    SchedulePillNotification(updatedSchedule);
+                    SchedulePillNotification(updatedSchedule, language);
                 }
             });
 

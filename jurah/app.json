@@ -41,7 +41,15 @@
         }
       ],
       "expo-font",
-      "expo-localization"
+      "expo-localization",
+      [
+        "expo-notifications",
+        {
+          "sounds": [],
+          "androidMode": "default",
+          "androidCollapsedTitle": "Jurah"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

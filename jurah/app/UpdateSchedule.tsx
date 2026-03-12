@@ -72,7 +72,7 @@ export function Update_schedule({ navigation, route }) {
             console.log(time.getHours());
 
             Scheduledispatch({ type: "update_schedule", payload });
-            SchedulePillNotification(payload);
+            SchedulePillNotification(payload, language);
             navigation.goBack();
             setAlreadyAdded(true);
             return;
