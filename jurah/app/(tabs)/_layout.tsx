@@ -1,4 +1,12 @@
-import { Platform, StyleSheet, I18nManager } from 'react-native';
+import { Platform, StyleSheet, I18nManager, Text, TextInput } from 'react-native';
+
+// Disable font scaling globally to prevent Android UI layout breaks
+(Text as any).defaultProps = (Text as any).defaultProps || {};
+(Text as any).defaultProps.allowFontScaling = false;
+
+(TextInput as any).defaultProps = (TextInput as any).defaultProps || {};
+(TextInput as any).defaultProps.allowFontScaling = false;
+
 import modal from '../Home';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
