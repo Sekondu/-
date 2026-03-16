@@ -115,7 +115,7 @@ export function History() {
 
     return (
         <ScrollView style={{ flex: 1, backgroundColor: '#F9F9F9' }} contentContainerStyle={{ padding: 20, paddingTop: 50, gap: 20, paddingBottom: 50 }}>
-            <Text style={{ fontFamily: 'ZillaSlab_700Bold', fontSize: width * 0.1, textAlign: 'center' }}>{language === "ar" ? "تاريخ المريض" : "Patient History"}</Text>
+            <Text allowFontScaling={false} style={{ fontFamily: 'ZillaSlab_700Bold', fontSize: width * 0.1, textAlign: 'center' }}>{language === "ar" ? "تاريخ المريض" : "Patient History"}</Text>
 
             {/* Add File Button */}
             <TouchableOpacity
@@ -127,13 +127,13 @@ export function History() {
                 }}
             >
                 <Ionicons name="add-circle" size={22} color="white" />
-                <Text style={{ color: 'white', fontFamily: language === "ar" ? undefined : 'SpaceMono_400Regular', fontSize: width * 0.04 }}>{language === "ar" ? "إضافة ملف" : "Add File"}</Text>
+                <Text allowFontScaling={false} style={{ color: 'white', fontFamily: language === "ar" ? undefined : 'SpaceMono_400Regular', fontSize: width * 0.04 }}>{language === "ar" ? "إضافة ملف" : "Add File"}</Text>
             </TouchableOpacity>
 
             {/* File List */}
-            <Text style={{ fontFamily: 'ZillaSlab_700Bold', fontSize: width * 0.07, textAlign: language === "ar" ? "right" : 'left', marginTop: 30 }}>{language === "ar" ? "السجلات الطبية" : "Medical Records"}</Text>
+            <Text allowFontScaling={false} style={{ fontFamily: 'ZillaSlab_700Bold', fontSize: width * 0.07, textAlign: language === "ar" ? "right" : 'left', marginTop: 30 }}>{language === "ar" ? "السجلات الطبية" : "Medical Records"}</Text>
             {Filestate.filter((file: any) => file.category === "medical_record").length === 0 ? (
-                <Text style={{ fontSize: width * 0.04, textAlign: 'center', color: 'grey', marginTop: 20, fontFamily: language === "ar" ? undefined : 'SpaceMono_400Regular' }}>
+                <Text allowFontScaling={false} style={{ fontSize: width * 0.04, textAlign: 'center', color: 'grey', marginTop: 20, fontFamily: language === "ar" ? undefined : 'SpaceMono_400Regular' }}>
                     {language === "ar" ? "لا توجد ملفات مضافة" : "No files added yet"}.
                 </Text>
             ) : (
@@ -145,11 +145,11 @@ export function History() {
                             shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 4, elevation: 2,
                         }}>
                             <TouchableOpacity onPress={() => handleReadFile(file)} style={{ flex: 1, gap: 4 }}>
-                                <Text style={{ fontFamily: 'ZillaSlab_400Regular', fontSize: width * 0.045 }} numberOfLines={1}>{file.fileName}</Text>
-                                <Text style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.03, color: 'grey' }}>
+                                <Text allowFontScaling={false} style={{ fontFamily: 'ZillaSlab_400Regular', fontSize: width * 0.045 }} numberOfLines={1}>{file.fileName}</Text>
+                                <Text allowFontScaling={false} style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.03, color: 'grey' }}>
                                     {file.category === 'medical_record' ? '📋 Medical Record' : '🩻 Radiation Report'}
                                 </Text>
-                                <Text style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.025, color: 'lightgrey' }}>
+                                <Text allowFontScaling={false} style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.025, color: 'lightgrey' }}>
                                     {new Date(file.dateAdded).toLocaleDateString()}
                                 </Text>
                             </TouchableOpacity>
@@ -161,9 +161,9 @@ export function History() {
                 ))
             )}
 
-            <Text style={{ fontFamily: 'ZillaSlab_700Bold', fontSize: width * 0.07, textAlign: language === "ar" ? "right" : 'left', marginTop: 30 }}>{language === "ar" ? "تقارير الأشعة" : "Radiation Reports"}</Text>
+            <Text allowFontScaling={false} style={{ fontFamily: 'ZillaSlab_700Bold', fontSize: width * 0.07, textAlign: language === "ar" ? "right" : 'left', marginTop: 30 }}>{language === "ar" ? "تقارير الأشعة" : "Radiation Reports"}</Text>
             {Filestate.filter(file => file.category === "radiation_report").length === 0 ? (
-                <Text style={{ fontSize: width * 0.04, textAlign: 'center', color: 'grey', marginTop: 20, fontFamily: language === "ar" ? undefined : 'SpaceMono_400Regular' }}>
+                <Text allowFontScaling={false} style={{ fontSize: width * 0.04, textAlign: 'center', color: 'grey', marginTop: 20, fontFamily: language === "ar" ? undefined : 'SpaceMono_400Regular' }}>
                     {language === "ar" ? "لا توجد ملفات مضافة" : "No files added yet"}.
                 </Text>
             ) : (
@@ -175,11 +175,11 @@ export function History() {
                             shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 4, elevation: 2,
                         }}>
                             <TouchableOpacity onPress={() => handleReadFile(file)} style={{ flex: 1, gap: 4 }}>
-                                <Text style={{ fontFamily: 'ZillaSlab_400Regular', fontSize: width * 0.045 }} numberOfLines={1}>{file.fileName}</Text>
-                                <Text style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.03, color: 'grey' }}>
+                                <Text allowFontScaling={false} style={{ fontFamily: 'ZillaSlab_400Regular', fontSize: width * 0.045 }} numberOfLines={1}>{file.fileName}</Text>
+                                <Text allowFontScaling={false} style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.03, color: 'grey' }}>
                                     {file.category === 'medical_record' ? '📋 Medical Record' : '🩻 Radiation Report'}
                                 </Text>
-                                <Text style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.025, color: 'lightgrey' }}>
+                                <Text allowFontScaling={false} style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.025, color: 'lightgrey' }}>
                                     {new Date(file.dateAdded).toLocaleDateString()}
                                 </Text>
                             </TouchableOpacity>
@@ -191,9 +191,9 @@ export function History() {
                 ))
             )}
 
-            <Text style={{ fontFamily: 'ZillaSlab_700Bold', fontSize: width * 0.07, textAlign: language === "ar" ? "right" : 'left', marginTop: 30 }}>{language === "ar" ? "تقارير المختبر" : "Laboratory Reports"}</Text>
+            <Text allowFontScaling={false} style={{ fontFamily: 'ZillaSlab_700Bold', fontSize: width * 0.07, textAlign: language === "ar" ? "right" : 'left', marginTop: 30 }}>{language === "ar" ? "تقارير المختبر" : "Laboratory Reports"}</Text>
             {Filestate.filter(file => file.category === "laboratory_report").length === 0 ? (
-                <Text style={{ fontSize: width * 0.04, textAlign: 'center', color: 'grey', marginTop: 20, fontFamily: language === "ar" ? undefined : 'SpaceMono_400Regular' }}>
+                <Text allowFontScaling={false} style={{ fontSize: width * 0.04, textAlign: 'center', color: 'grey', marginTop: 20, fontFamily: language === "ar" ? undefined : 'SpaceMono_400Regular' }}>
                     {language === "ar" ? "لا توجد ملفات مضافة" : "No files added yet"}.
                 </Text>
             ) : (
@@ -205,11 +205,11 @@ export function History() {
                             shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 4, elevation: 2,
                         }}>
                             <TouchableOpacity onPress={() => handleReadFile(file)} style={{ flex: 1, gap: 4 }}>
-                                <Text style={{ fontFamily: 'ZillaSlab_400Regular', fontSize: width * 0.045 }} numberOfLines={1}>{file.fileName}</Text>
-                                <Text style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.03, color: 'grey' }}>
+                                <Text allowFontScaling={false} style={{ fontFamily: 'ZillaSlab_400Regular', fontSize: width * 0.045 }} numberOfLines={1}>{file.fileName}</Text>
+                                <Text allowFontScaling={false} style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.03, color: 'grey' }}>
                                     {"laboratory report"}
                                 </Text>
-                                <Text style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.025, color: 'lightgrey' }}>
+                                <Text allowFontScaling={false} style={{ fontFamily: 'SpaceMono_400Regular', fontSize: width * 0.025, color: 'lightgrey' }}>
                                     {new Date(file.dateAdded).toLocaleDateString()}
                                 </Text>
                             </TouchableOpacity>
