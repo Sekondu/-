@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, I18nManager, Text, TextInput } from 'react-native';
+import { Platform, StyleSheet, I18nManager, Text, TextInput, StatusBar } from 'react-native';
 
 // Disable font scaling globally to prevent Android UI layout breaks
 (Text as any).defaultProps = (Text as any).defaultProps || {};
@@ -10,7 +10,6 @@ import { Platform, StyleSheet, I18nManager, Text, TextInput } from 'react-native
 import modal from '../Home';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import Cabinet from '../Cabinet';
@@ -30,7 +29,9 @@ import { ScheduleProvider } from '../ScheduleContext';
 import { LanguageProvider } from '../LanguageContext';
 import { Add_schedule } from '../AddSchedule';
 import { Update_schedule } from '../UpdateSchedule';
+import FileProvider from '../FileContext';
 import Settings from '../Settings';
+import { History } from '../History';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -67,6 +68,12 @@ function HomeScreen() {
       <Tab.Screen options={{
         headerShown: false,
         tabBarIcon: ({ color, size }) => (
+          <Ionicons name="file-tray-full" size={size} color={color} />
+        ),
+      }} name="History" component={History} />
+      <Tab.Screen options={{
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => (
           <Ionicons name="settings" size={size} color={color} />
         ),
       }} name="settings" component={Settings} />
@@ -99,18 +106,21 @@ export default function full_app() {
 
 
   return <SafeAreaProvider>
+    <StatusBar barStyle={"dark-content"} backgroundColor={"#F9F9F9"} />
     <LanguageProvider>
-      <ScheduleProvider>
-        <PillProvider>
-          <Stack.Navigator>
-            <Stack.Screen name="Main Tabs" component={HomeScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="add_medecine" component={Add_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-            <Stack.Screen name="update_medecine" component={Update_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-            <Stack.Screen name="add_schedule" component={Add_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-            <Stack.Screen name="update_schedule" component={Update_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
-          </Stack.Navigator>
-        </PillProvider>
-      </ScheduleProvider>
+      <FileProvider>
+        <ScheduleProvider>
+          <PillProvider>
+            <Stack.Navigator>
+              <Stack.Screen name="Main Tabs" component={HomeScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="add_medecine" component={Add_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+              <Stack.Screen name="update_medecine" component={Update_medecine} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+              <Stack.Screen name="add_schedule" component={Add_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+              <Stack.Screen name="update_schedule" component={Update_schedule} options={{ presentation: "modal", headerShown: false, contentStyle: { backgroundColor: "#F9F9F9" } }} />
+            </Stack.Navigator>
+          </PillProvider>
+        </ScheduleProvider>
+      </FileProvider>
     </LanguageProvider>
   </SafeAreaProvider>
 }

@@ -16,6 +16,7 @@ const days_of_Week_arabic = ["السبت", "الاحد", "الاثنين", "ال
 export default function ModalScreen({ navigation }) {
   const { width, height } = useWindowDimensions();
 
+
   let scrollRef = useRef<ScrollView | null>(null);
   let scrollY = useRef(0);
 
